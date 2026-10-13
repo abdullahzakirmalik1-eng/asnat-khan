@@ -79,6 +79,32 @@ while ($listener.IsListening) {
                     $outJson = ConvertTo-Json $inquiries -Depth 6
                     [System.IO.File]::WriteAllText($inquiriesFile, $outJson, [System.Text.Encoding]::UTF8)
 
+                    # Forward directly to Supabase project gehsytzcfikikzkuzstc
+                    try {
+                        $sbUrl = "https://gehsytzcfikikzkuzstc.supabase.co/rest/v1/quote_inquiries"
+                        $sbKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlaHN5dHpjZmlraWt6a3V6c3RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyNzc5ODEsImV4cCI6MjEwNjg1Mzk4MX0.U0iXv6VRBOZbOL2qNHn9j8L6Z5u3-lEQ8SsFYmZVd5I"
+                        $headers = @{
+                            "apikey" = $sbKey
+                            "Authorization" = "Bearer $sbKey"
+                            "Content-Type" = "application/json"
+                            "Prefer" = "return=minimal"
+                        }
+                        $sbRecord = @{
+                            name = $newInquiry.name
+                            email = $newInquiry.email
+                            business = $newInquiry.business
+                            website = $newInquiry.website
+                            project_type = $newInquiry.projectType
+                            services = if ($newInquiry.services) { @($newInquiry.services) } else { @() }
+                            description = $newInquiry.description
+                            package = $newInquiry.package
+                            budget = $newInquiry.budget
+                            timeline = $newInquiry.timeline
+                        }
+                        $sbPayload = ConvertTo-Json $sbRecord -Depth 4
+                        Invoke-RestMethod -Uri $sbUrl -Method Post -Headers $headers -Body $sbPayload -TimeoutSec 5 -ErrorAction SilentlyContinue | Out-Null
+                    } catch {}
+
                     $resBytes = [System.Text.Encoding]::UTF8.GetBytes('{"success":true,"message":"Inquiry received"}')
                     $response.StatusCode = 200
                     $response.ContentType = "application/json; charset=utf-8"

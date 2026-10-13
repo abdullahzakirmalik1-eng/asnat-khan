@@ -714,6 +714,25 @@ function initQuotePage() {
         throw new Error('Server returned ' + response.status);
       }
     } catch (err) {
+      // Direct Supabase fallback
+      if (typeof window !== 'undefined' && window.submitQuoteDirectly) {
+        try {
+          const directSuccess = await window.submitQuoteDirectly(payload);
+          if (directSuccess) {
+            quoteForm.style.display = 'none';
+            const progressNav = document.querySelector('.form-progress-nav');
+            if (progressNav) progressNav.style.display = 'none';
+            if (successPanel) {
+              successPanel.style.display = 'block';
+              successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+          }
+        } catch (directErr) {
+          console.warn('Direct Supabase submission attempt:', directErr);
+        }
+      }
+
       if (window.location.protocol === 'file:') {
         quoteForm.style.display = 'none';
         const progressNav = document.querySelector('.form-progress-nav');

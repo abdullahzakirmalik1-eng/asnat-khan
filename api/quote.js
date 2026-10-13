@@ -73,12 +73,13 @@ export default async function handler(req, res) {
 
     console.log('[API /api/quote] Received quote inquiry:', JSON.stringify(inquiryRecord, null, 2));
 
-    // Supabase integration (optional / fallback-friendly)
+    // Supabase integration for project: gehsytzcfikikzkuzstc
     const supabaseUrl = process.env.SUPABASE_URL || 'https://gehsytzcfikikzkuzstc.supabase.co';
     const supabaseKey =
       process.env.SUPABASE_SERVICE_ROLE_KEY ||
       process.env.SUPABASE_ANON_KEY ||
-      'sb_publishable_ihaNzfNzlUusL1Typ4odvw_NmWjnhxT';
+      process.env.SUPABASE_PUBLISHABLE_KEY ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlaHN5dHpjZmlraWt6a3V6c3RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyNzc5ODEsImV4cCI6MjEwNjg1Mzk4MX0.U0iXv6VRBOZbOL2qNHn9j8L6Z5u3-lEQ8SsFYmZVd5I';
 
     let dbSaved = false;
     if (supabaseUrl && supabaseKey) {
