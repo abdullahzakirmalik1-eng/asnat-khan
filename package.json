@@ -1,0 +1,14 @@
+{
+  "name": "asnat-khan-portfolio",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Portfolio and creative design services for Asnat Khan",
+  "scripts": {
+    "dev": "powershell -ExecutionPolicy Bypass -File ./serve.ps1",
+    "start": "powershell -ExecutionPolicy Bypass -File ./serve.ps1"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2"
+  }
+}
