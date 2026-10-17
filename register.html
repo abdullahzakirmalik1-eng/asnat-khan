@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Create a customer account with Asnat Khan to keep your orders, package selections, and project milestones organized in one place.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+
+  <!-- Simplified Header -->
+  <header class="auth-header" role="banner">
+    <div class="auth-header-container">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Studio Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <nav class="auth-header-nav" aria-label="Authentication navigation">
+        <a href="services.html">Services</a>
+        <a href="login.html" class="auth-header-action-link" data-auth-crosslink aria-label="Sign in to existing account">Sign In</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="auth-main" id="main-content">
+    <div class="auth-layout-grid">
+      
+      <!-- Left Editorial Panel -->
+      <aside class="auth-editorial-panel" aria-label="Account benefits">
+        <div>
+          <span class="auth-editorial-badge">
+            <span class="logo-dot" aria-hidden="true"></span> Private Studio Access
+          </span>
+          <h2 class="auth-editorial-title">Your Studio Collaboration Space.</h2>
+          <p class="auth-editorial-desc">
+            Register your client account to manage order specifications, review staged previews, and receive direct production updates.
+          </p>
+
+          <ul class="auth-trust-list">
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Personalized customer dashboard upon project kickoff</span>
+            </li>
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Encrypted credentials backed by enterprise Firebase standards</span>
+            </li>
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Preserves your checkout package selection seamlessly</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="auth-editorial-quote">
+          &ldquo;Every client receives direct communication and architectural precision.&rdquo; &mdash; Asnat Khan
+        </div>
+      </aside>
+
+      <!-- Right Form Card -->
+      <section class="auth-form-card" aria-labelledby="register-heading">
+        
+        <!-- Registration Form View -->
+        <div id="register-form-view">
+          <header class="auth-form-header">
+            <span class="auth-eyebrow">CREATE YOUR ACCOUNT</span>
+            <h1 class="auth-heading" id="register-heading">Your Projects. One Place.</h1>
+            <p class="auth-subcopy">Create an account to keep your orders and project details connected.</p>
+          </header>
+
+          <!-- Top Status Alert Banner -->
+          <div id="register-status-alert" class="auth-status-alert" role="alert" aria-live="assertive"></div>
+
+          <form id="register-form" novalidate>
+            <!-- Full Name -->
+            <div class="auth-form-group">
+              <label for="register-name" class="auth-form-label">
+                Full Name <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="register-name"
+                name="name"
+                class="auth-input"
+                placeholder="Your full name"
+                required
+                autocomplete="name"
+                aria-describedby="register-name-error"
+              >
+              <p class="field-error" id="register-name-error" role="alert"></p>
+            </div>
+
+            <!-- Email Address -->
+            <div class="auth-form-group">
+              <label for="register-email" class="auth-form-label">
+                Email Address <span class="req" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="email"
+                id="register-email"
+                name="email"
+                class="auth-input"
+                placeholder="you@example.com"
+                required
+                autocomplete="email"
+                aria-describedby="register-email-error"
+              >
+              <p class="field-error" id="register-email-error" role="alert"></p>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-form-group">
+              <label for="register-password" class="auth-form-label">
+                Password <span class="req" aria-hidden="true">*</span>
+              </label>
+              <div class="password-input-wrap">
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  class="auth-input"
+                  placeholder="Create a password"
+                  required
+                  autocomplete="new-password"
+                  aria-describedby="register-password-guidance register-password-error"
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  data-toggle-password="register-password"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;" aria-hidden="true">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-guidance" id="register-password-guidance">Minimum 6 characters (Firebase Authentication standard).</p>
+              <p class="field-error" id="register-password-error" role="alert"></p>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="auth-form-group">
+              <label for="register-confirm-password" class="auth-form-label">
+                Confirm Password <span class="req" aria-hidden="true">*</span>
+              </label>
+              <div class="password-input-wrap">
+                <input
+                  type="password"
+                  id="register-confirm-password"
+                  name="confirmPassword"
+                  class="auth-input"
+                  placeholder="Enter your password again"
+                  required
+                  autocomplete="new-password"
+                  aria-describedby="register-confirm-error"
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  data-toggle-password="register-confirm-password"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;" aria-hidden="true">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-error" id="register-confirm-error" role="alert"></p>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="register-submit-btn" class="btn-auth-primary" style="margin-top: 1.5rem;">
+              CREATE ACCOUNT &rarr;
+            </button>
+
+            <!-- Switch to Login -->
+            <p class="auth-switch-text">
+              Already have an account?
+              <a href="login.html" class="auth-switch-link" data-auth-crosslink>Sign in</a>
+            </p>
+          </form>
+        </div>
+
+        <!-- Prepared Genuine Registration Success State (Triggered strictly by genuine Firebase response in Phase 2) -->
+        <div id="register-success-view" class="auth-success-card" style="display: none;" aria-live="polite">
+          <div class="auth-success-icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <span class="auth-eyebrow">ACCOUNT CREATED</span>
+          <h2 class="auth-heading" style="margin-top: 0.5rem;">You&rsquo;re All Set for the Next Step.</h2>
+          <p class="auth-subcopy" style="margin: 1rem 0 1.75rem;">
+            Your account has been created. Check your email to verify your address if verification is required.
+          </p>
+          <a href="checkout.html" id="register-continue-btn" class="btn-auth-primary">
+            CONTINUE &rarr;
+          </a>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Simplified Footer -->
+  <footer class="auth-footer" role="contentinfo">
+    <div class="auth-footer-inner">
+      <div>&copy; 2026 Asnat Khan. All rights reserved.</div>
+      <div class="auth-footer-links">
+        <a href="services.html">Services</a>
+        <a href="index.html">Studio Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Script Module -->
+  <script type="module" src="js/auth/auth-ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Details — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Review your website package, customize optional enhancements, and share your project details to get started with Asnat Khan.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-order">
+
+  <!-- Minimal Checkout Header -->
+  <header class="checkout-header" id="checkout-header">
+    <div class="container checkout-header-inner">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <div class="checkout-header-actions">
+        <a href="services.html" class="checkout-back-link" aria-label="Return to services page">
+          <span aria-hidden="true">&larr;</span> Back to Services
+        </a>
+        <div class="checkout-secure-badge" aria-label="Secure checkout transaction">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>SECURE CHECKOUT</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Stepper: 01 ORDER DETAILS → 02 CHECKOUT → 03 CONFIRMATION -->
+  <div class="checkout-stepper-wrap" aria-label="Checkout Progress">
+    <div class="container">
+      <nav class="checkout-stepper" aria-label="Checkout stages">
+        <div class="stepper-step active" aria-current="step">
+          <span class="stepper-num">01</span>
+          <span>ORDER DETAILS</span>
+          <span class="stepper-gold-dot" aria-hidden="true"></span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step">
+          <span class="stepper-num">02</span>
+          <span>CHECKOUT</span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step">
+          <span class="stepper-num">03</span>
+          <span>CONFIRMATION</span>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content" class="container">
+    <div class="checkout-page-intro">
+      <h1 class="checkout-page-title">Let's Get Your Project Moving.</h1>
+      <p class="checkout-page-sub">
+        Review your selection, tell us a little about your project, and we'll guide you through the next step.
+      </p>
+    </div>
+
+    <form id="order-details-form" class="checkout-grid" novalidate>
+      <!-- LEFT: Forms & Cards -->
+      <div class="checkout-main-col">
+
+        <!-- 01. Selected Service -->
+        <section class="checkout-panel" aria-labelledby="heading-service">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-service">
+              <span>01</span> Selected Website Package
+            </h2>
+            <button type="button" class="change-package-btn" id="change-package-btn" aria-label="Change current website package">
+              <span>Change Package</span>
+              <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+
+          <div id="selected-package-container" class="selected-package-display">
+            <!-- Dynamic content injected by checkout.js from authoritative catalogue -->
+          </div>
+        </section>
+
+        <!-- 02. Optional Additional Products (E-Commerce Only) -->
+        <section class="checkout-panel" id="ecommerce-products-box" style="display: none;" aria-labelledby="heading-products">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-products">
+              <span>02</span> E-Commerce Products Setup
+            </h2>
+          </div>
+          <div class="ecommerce-stepper-box">
+            <div class="stepper-info">
+              <h4>Additional E-Commerce Products</h4>
+              <p>First 10 products are included in your package. Additional products are $1 each.</p>
+            </div>
+            <div class="stepper-control">
+              <button type="button" class="stepper-btn" id="stepper-minus" aria-label="Decrease product count">&minus;</button>
+              <input type="number" id="extra-products-count" class="stepper-input" min="0" max="10000" value="0" aria-label="Quantity of additional products">
+              <button type="button" class="stepper-btn" id="stepper-plus" aria-label="Increase product count">&plus;</button>
+              <span class="stepper-subtotal-tag" id="stepper-cost-display">$0.00</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03. Optional Additional Services -->
+        <section class="checkout-panel" aria-labelledby="heading-addons">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-addons">
+              <span>03</span> Optional Enhancements
+            </h2>
+          </div>
+          <p class="checkout-panel-desc">Add supporting studio services to your project scope.</p>
+
+          <div class="addon-services-list">
+            <!-- Pitch Deck Design -->
+            <label class="addon-service-card" for="addon-pitchdeck">
+              <div class="addon-checkbox-wrap">
+                <input type="checkbox" id="addon-pitchdeck" class="sr-only">
+                <div class="addon-custom-checkbox" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+              </div>
+              <div class="addon-body">
+                <div class="addon-header-line">
+                  <span class="addon-title">Pitch Deck Design</span>
+                  <span class="addon-price-tag">+$50.00</span>
+                </div>
+                <p class="addon-description">A professionally designed pitch deck for presenting your business, idea or opportunity (up to 20 pages/slides).</p>
+              </div>
+            </label>
+
+            <!-- Article Writing -->
+            <div class="addon-service-card" id="card-writing">
+              <div class="addon-checkbox-wrap">
+                <input type="checkbox" id="addon-writing" class="sr-only">
+                <div class="addon-custom-checkbox" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+              </div>
+              <div class="addon-body">
+                <div class="addon-header-line">
+                  <label for="addon-writing" class="addon-title" style="cursor: pointer;">Article Writing</label>
+                  <span class="addon-price-tag">+$10.00 / 1,000 words</span>
+                </div>
+                <p class="addon-description">Clear, persuasive editorial copy written and tailored specifically for your target audience.</p>
+                <div class="addon-unit-config">
+                  <label for="writing-units-select" class="addon-unit-label">Desired Word Count:</label>
+                  <select id="writing-units-select" class="addon-unit-select" aria-label="Select article word count">
+                    <option value="1">1,000 words (1 unit — $10)</option>
+                    <option value="2">2,000 words (2 units — $20)</option>
+                    <option value="3">3,000 words (3 units — $30)</option>
+                    <option value="5">5,000 words (5 units — $50)</option>
+                    <option value="10">10,000 words (10 units — $100)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04. Project Information -->
+        <section class="checkout-panel" aria-labelledby="heading-project-info">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-project-info">
+              <span>04</span> Project Information
+            </h2>
+          </div>
+          <p class="checkout-panel-desc">Tell us a little about your business and website needs so we can hit the ground running.</p>
+
+          <div class="checkout-form-grid">
+            <div class="checkout-field">
+              <label for="project-name" class="checkout-label">
+                <span>Project Name</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="text" id="project-name" class="checkout-input" placeholder="e.g. Lumina Launch Website">
+            </div>
+
+            <div class="checkout-field">
+              <label for="brand-name" class="checkout-label">
+                <span>Business / Brand Name</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="text" id="brand-name" class="checkout-input" placeholder="e.g. Lumina Innovations">
+            </div>
+
+            <div class="checkout-field full-width">
+              <label for="website-url" class="checkout-label">
+                <span>Existing Website URL</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="url" id="website-url" class="checkout-input" placeholder="https://yourcurrentwebsite.com (if redesign)">
+            </div>
+
+            <div class="checkout-field full-width">
+              <label for="project-description" class="checkout-label">
+                <span>Brief Project Description <span class="required-star" aria-hidden="true">*</span></span>
+              </label>
+              <textarea id="project-description" class="checkout-textarea" rows="4" required placeholder="Tell us about your business, what you want the website to do, and any important requirements."></textarea>
+              <div id="project-desc-error" class="checkout-error-text" role="alert" aria-live="polite"></div>
+            </div>
+
+            <div class="checkout-field">
+              <label for="project-goals" class="checkout-label">
+                <span>Main Goals</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="text" id="project-goals" class="checkout-input" placeholder="e.g. Lead generation, showcase work, online sales">
+            </div>
+
+            <div class="checkout-field">
+              <label for="project-references" class="checkout-label">
+                <span>Reference Websites / Inspiration</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="text" id="project-references" class="checkout-input" placeholder="Links or styles you admire">
+            </div>
+
+            <div class="checkout-field full-width">
+              <label for="special-requirements" class="checkout-label">
+                <span>Special Requirements</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <textarea id="special-requirements" class="checkout-textarea" rows="2" placeholder="Any third-party integrations, booking systems, or specific launch dates"></textarea>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: Persistent Sticky Order Summary -->
+      <aside class="checkout-sidebar" aria-label="Order summary sidebar">
+        <div class="order-summary-card">
+          <div class="summary-card-header">
+            <h3 class="summary-card-title">Order Summary</h3>
+            <span class="package-tier-badge">VERIFIED PRICING</span>
+          </div>
+
+          <div id="summary-items-list" class="summary-items-list">
+            <!-- Dynamically populated from authoritative package catalogue -->
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-item-row" style="margin-bottom: 0.5rem;">
+            <span class="summary-item-name">Subtotal</span>
+            <span class="summary-item-price" id="summary-subtotal">$0.00</span>
+          </div>
+
+          <div class="summary-item-row" style="margin-bottom: 1rem;">
+            <span class="summary-item-name" style="color: var(--color-sage);">Taxes &amp; Fees</span>
+            <span class="summary-item-price" id="summary-tax" style="color: var(--color-sage); font-weight: normal;">$0.00</span>
+          </div>
+
+          <div class="summary-total-row">
+            <span class="summary-total-label">Total Due</span>
+            <div class="summary-total-figure">
+              <div class="summary-total-amount" id="summary-total">$0.00</div>
+              <span class="summary-total-currency">USD &bull; ONE-TIME</span>
+            </div>
+          </div>
+
+          <div class="summary-domain-reminder">
+            <strong>Domain &amp; Hosting:</strong> You provide the domain name you want to use. Free hosting is included with your website package.
+          </div>
+
+          <div class="summary-cta-wrap">
+            <button type="submit" id="continue-checkout-btn" class="btn btn-primary btn-large">
+              <span>CONTINUE TO CHECKOUT</span>
+              <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+            </button>
+            <div class="summary-security-note">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Encrypted checkout. Server-verified pricing.</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </form>
+  </main>
+
+  <!-- Package Switcher Modal -->
+  <div class="pkg-modal" id="package-switcher-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-pkg-heading">
+    <div class="pkg-modal-backdrop" id="package-modal-backdrop"></div>
+    <div class="pkg-modal-panel">
+      <div class="pkg-modal-header">
+        <h3 id="modal-pkg-heading" style="color: var(--color-silver); font-size: 1.25rem; font-weight: 700;">Change Website Package</h3>
+        <button type="button" class="pkg-modal-close" id="package-modal-close" aria-label="Close package dialog">&times;</button>
+      </div>
+      <p style="color: var(--color-sage); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        Switching packages preserves all your entered project details and recalculates your total immediately.
+      </p>
+
+      <div class="pkg-modal-grid">
+        <!-- Basic -->
+        <div class="pkg-modal-card" data-package="basic">
+          <div>
+            <span class="package-tier-badge">STARTER TIER</span>
+            <h4 style="color: var(--color-silver); font-size: 1.2rem; margin: 0.3rem 0;">BASIC</h4>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-silver); margin-bottom: 0.75rem;">$50 <span style="font-size: 0.75rem; color: var(--color-sage); font-weight: normal;">USD</span></div>
+            <p style="font-size: 0.82rem; color: var(--color-sage); line-height: 1.45; margin-bottom: 1rem;">Complete basic business website. Up to 5 pages, content, images, speed, SEO, domain setup &amp; free hosting.</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-block"><span>SELECT BASIC</span></button>
+        </div>
+
+        <!-- Standard -->
+        <div class="pkg-modal-card" data-package="standard">
+          <div>
+            <span class="package-tier-badge" style="color: var(--color-gold-light);">RECOMMENDED</span>
+            <h4 style="color: var(--color-silver); font-size: 1.2rem; margin: 0.3rem 0;">STANDARD</h4>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-silver); margin-bottom: 0.75rem;">$100 <span style="font-size: 0.75rem; color: var(--color-sage); font-weight: normal;">USD</span></div>
+            <p style="font-size: 0.82rem; color: var(--color-sage); line-height: 1.45; margin-bottom: 1rem;">Up to 7 pages, payment functionality included, everything in Basic, speed, SEO &amp; free hosting.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-block"><span>SELECT STANDARD</span></button>
+        </div>
+
+        <!-- E-Commerce -->
+        <div class="pkg-modal-card" data-package="ecommerce">
+          <div>
+            <span class="package-tier-badge">ONLINE STORE</span>
+            <h4 style="color: var(--color-silver); font-size: 1.2rem; margin: 0.3rem 0;">E-COMMERCE</h4>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-silver); margin-bottom: 0.75rem;">$200 <span style="font-size: 0.75rem; color: var(--color-sage); font-weight: normal;">USD</span></div>
+            <p style="font-size: 0.82rem; color: var(--color-sage); line-height: 1.45; margin-bottom: 1rem;">Up to 8 pages, 10 e-commerce products included, payment functionality, everything in Basic &amp; free hosting.</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-block"><span>SELECT E-COMMERCE</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side Logic Script Module -->
+  <script type="module">
+    import { initOrderDetailsPage } from './js/checkout.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      initOrderDetailsPage();
+    });
+  </script>
+</body>
+</html>

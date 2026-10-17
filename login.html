@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Sign In — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Sign in to your Asnat Khan customer account to access your studio projects, orders, and design deliverables.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+
+  <!-- Simplified Header -->
+  <header class="auth-header" role="banner">
+    <div class="auth-header-container">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Studio Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <nav class="auth-header-nav" aria-label="Authentication navigation">
+        <a href="services.html">Services</a>
+        <a href="register.html" class="auth-header-action-link" data-auth-crosslink aria-label="Create a new customer account">Create Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="auth-main" id="main-content">
+    <div class="auth-layout-grid">
+      
+      <!-- Left Editorial Panel -->
+      <aside class="auth-editorial-panel" aria-label="Studio overview">
+        <div>
+          <span class="auth-editorial-badge">
+            <span class="logo-dot" aria-hidden="true"></span> Customer Portal
+          </span>
+          <h2 class="auth-editorial-title">Direct Collaboration. Every Milestone.</h2>
+          <p class="auth-editorial-desc">
+            Access your active website build, preview private review deployments, and review project documentation directly with Asnat Khan.
+          </p>
+
+          <ul class="auth-trust-list">
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Zero third-party tracking; encrypted studio communications</span>
+            </li>
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>Seamless link to your active checkout order & packages</span>
+            </li>
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>Milestone tracking from architecture to launch</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="auth-editorial-quote">
+          &ldquo;Craftsmanship and clarity in every release.&rdquo; &mdash; Asnat Khan
+        </div>
+      </aside>
+
+      <!-- Right Form Card -->
+      <section class="auth-form-card" aria-labelledby="login-heading">
+        <header class="auth-form-header">
+          <span class="auth-eyebrow">WELCOME BACK</span>
+          <h1 class="auth-heading" id="login-heading">Good to Have You Back.</h1>
+          <p class="auth-subcopy">Sign in to access your account and keep your project moving.</p>
+        </header>
+
+        <!-- Top Status Alert Banner -->
+        <div id="login-status-alert" class="auth-status-alert" role="alert" aria-live="assertive"></div>
+
+        <form id="login-form" novalidate>
+          <!-- Email Address -->
+          <div class="auth-form-group">
+            <label for="login-email" class="auth-form-label">
+              Email Address <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="email"
+              id="login-email"
+              name="email"
+              class="auth-input"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+              aria-describedby="login-email-error"
+            >
+            <p class="field-error" id="login-email-error" role="alert"></p>
+          </div>
+
+          <!-- Password -->
+          <div class="auth-form-group">
+            <label for="login-password" class="auth-form-label">
+              Password <span class="req" aria-hidden="true">*</span>
+            </label>
+            <div class="password-input-wrap">
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                class="auth-input"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+                aria-describedby="login-password-error"
+              >
+              <button
+                type="button"
+                class="password-toggle-btn"
+                data-toggle-password="login-password"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <!-- Eye Open Icon -->
+                <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <!-- Eye Off Icon -->
+                <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <p class="field-error" id="login-password-error" role="alert"></p>
+          </div>
+
+          <!-- Controls: Remember Me & Forgot Password -->
+          <div class="auth-controls-row">
+            <label class="auth-remember-wrap" for="login-remember">
+              <input type="checkbox" id="login-remember" name="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="forgot-password.html" class="auth-forgot-link" data-auth-crosslink>Forgot password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="login-submit-btn" class="btn-auth-primary">
+            SIGN IN &rarr;
+          </button>
+
+          <!-- Switch to Register -->
+          <p class="auth-switch-text">
+            Don&rsquo;t have an account?
+            <a href="register.html" class="auth-switch-link" data-auth-crosslink>Create an account</a>
+          </p>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Simplified Footer -->
+  <footer class="auth-footer" role="contentinfo">
+    <div class="auth-footer-inner">
+      <div>&copy; 2026 Asnat Khan. All rights reserved.</div>
+      <div class="auth-footer-links">
+        <a href="services.html">Services</a>
+        <a href="index.html">Studio Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Script Module -->
+  <script type="module" src="js/auth/auth-ui.js"></script>
+</body>
+</html>

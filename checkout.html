@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Review your order details, customer information, and complete secure payment for your website project with Asnat Khan.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-checkout">
+
+  <!-- Minimal Checkout Header -->
+  <header class="checkout-header" id="checkout-header">
+    <div class="container checkout-header-inner">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <div class="checkout-header-actions">
+        <a href="order.html" class="checkout-back-link" aria-label="Return to order details">
+          <span aria-hidden="true">&larr;</span> Back to Order Details
+        </a>
+        <div class="checkout-secure-badge" aria-label="Secure checkout transaction">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>SECURE CHECKOUT</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Stepper: 01 ORDER DETAILS → 02 CHECKOUT → 03 CONFIRMATION -->
+  <div class="checkout-stepper-wrap" aria-label="Checkout Progress">
+    <div class="container">
+      <nav class="checkout-stepper" aria-label="Checkout stages">
+        <div class="stepper-step completed">
+          <span class="stepper-num">&#10003;</span>
+          <span>ORDER DETAILS</span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step active" aria-current="step">
+          <span class="stepper-num">02</span>
+          <span>CHECKOUT</span>
+          <span class="stepper-gold-dot" aria-hidden="true"></span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step">
+          <span class="stepper-num">03</span>
+          <span>CONFIRMATION</span>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content" class="container">
+    <div class="checkout-page-intro">
+      <h1 class="checkout-page-title">Review Your Order.</h1>
+      <p class="checkout-page-sub">
+        Check your details and total before completing your purchase.
+      </p>
+    </div>
+
+    <!-- Error Banner (if returning from failed payment) -->
+    <div id="checkout-error-banner" style="display: none; margin-bottom: 2rem; background: rgba(255, 139, 139, 0.12); border: 1px solid rgba(255, 139, 139, 0.4); border-radius: var(--radius-md); padding: 1rem 1.25rem;">
+      <p id="checkout-error-message" style="color: #ff9d9d; font-size: 0.9rem; margin: 0; line-height: 1.4;"></p>
+    </div>
+
+    <form id="checkout-payment-form" class="checkout-grid" novalidate>
+      <!-- LEFT: Customer Information & Payment -->
+      <div class="checkout-main-col">
+
+        <!-- 01. Customer Information -->
+        <section class="checkout-panel" aria-labelledby="heading-customer-info">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-customer-info">
+              <span>01</span> Customer &amp; Billing Contact
+            </h2>
+          </div>
+          <p class="checkout-panel-desc">
+            We use these details for order confirmation, kickoff correspondence, and project delivery.
+            <span style="display: block; margin-top: 0.35rem; font-size: 0.85rem; color: var(--color-sage);">
+              Returning client? <a href="login.html?returnUrl=%2Fcheckout" style="color: var(--color-gold-light); text-decoration: underline;">Sign in to your account</a>
+            </span>
+          </p>
+
+          <div class="checkout-form-grid">
+            <div class="checkout-field">
+              <label for="customer-name" class="checkout-label">
+                <span>Full Name <span class="required-star" aria-hidden="true">*</span></span>
+              </label>
+              <input type="text" id="customer-name" class="checkout-input" autocomplete="name" required placeholder="Your full name">
+              <div id="name-error" class="checkout-error-text" role="alert" aria-live="polite"></div>
+            </div>
+
+            <div class="checkout-field">
+              <label for="customer-email" class="checkout-label">
+                <span>Email Address <span class="required-star" aria-hidden="true">*</span></span>
+              </label>
+              <input type="email" id="customer-email" class="checkout-input" autocomplete="email" required placeholder="you@company.com">
+              <div id="email-error" class="checkout-error-text" role="alert" aria-live="polite"></div>
+            </div>
+
+            <div class="checkout-field">
+              <label for="customer-country" class="checkout-label">
+                <span>Country / Region <span class="required-star" aria-hidden="true">*</span></span>
+              </label>
+              <select id="customer-country" class="checkout-select" autocomplete="country-name" required>
+                <option value="">Select your country</option>
+                <option value="United States" selected>United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+                <option value="Germany">Germany</option>
+                <option value="France">France</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Other">Other Country</option>
+              </select>
+              <div id="country-error" class="checkout-error-text" role="alert" aria-live="polite"></div>
+            </div>
+
+            <div class="checkout-field">
+              <label for="customer-business" class="checkout-label">
+                <span>Business / Organization Name</span>
+                <span class="optional-tag">optional</span>
+              </label>
+              <input type="text" id="customer-business" class="checkout-input" autocomplete="organization" placeholder="Company or studio name">
+            </div>
+          </div>
+        </section>
+
+        <!-- 02. Secure Payment Gateway -->
+        <section class="checkout-panel" aria-labelledby="heading-payment">
+          <div class="checkout-panel-header">
+            <h2 class="checkout-panel-title" id="heading-payment">
+              <span>02</span> Payment Verification
+            </h2>
+          </div>
+
+          <div class="payment-provider-status-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: var(--color-silver); letter-spacing: 0.05em;">GATEWAY INTEGRATION</span>
+              <span class="payment-status-badge test">
+                <span aria-hidden="true">&#9679;</span> SECURE INTEGRATION READY
+              </span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--color-silver); line-height: 1.5; margin-bottom: 0.75rem;">
+              Payments are securely authorized using official provider protocols with server-side validation. Credit card numbers and CVVs are handled exclusively by certified payment processors and never stored on this server.
+            </p>
+
+            <!-- Honest Developer Sandbox Selector (Active when live Stripe keys are pending) -->
+            <div class="test-gateway-selector">
+              <h5>Simulate &amp; Verify Payment State (Sandbox Mode)</h5>
+              <p style="font-size: 0.78rem; color: var(--color-sage); margin-bottom: 0.75rem;">
+                Stripe Checkout is integrated in code. Set <code style="color: var(--color-gold-light);">STRIPE_SECRET_KEY</code> in <code style="color: var(--color-gold-light);">.env</code> for live card settlement. Use the options below to test any flow state with the database:
+              </p>
+              <div class="test-options-grid">
+                <label class="test-option-btn selected" for="test-action-success">
+                  <input type="radio" name="testAction" id="test-action-success" value="verify_success" checked>
+                  <span><strong>Verify Success</strong> (Paid status)</span>
+                </label>
+                <label class="test-option-btn" for="test-action-pending">
+                  <input type="radio" name="testAction" id="test-action-pending" value="test_pending">
+                  <span><strong>Processing</strong> (Awaiting webhook)</span>
+                </label>
+                <label class="test-option-btn" for="test-action-failed">
+                  <input type="radio" name="testAction" id="test-action-failed" value="test_failed">
+                  <span><strong>Simulate Failure</strong> (Card decline)</span>
+                </label>
+                <label class="test-option-btn" for="test-action-cancel">
+                  <input type="radio" name="testAction" id="test-action-cancel" value="test_cancel">
+                  <span><strong>Simulate Cancel</strong> (Abandoned)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms & Scope Agreement -->
+          <div class="terms-agreement-box">
+            <input type="checkbox" id="terms-agree" class="terms-checkbox" required checked>
+            <label for="terms-agree" class="terms-text">
+              I agree to the project scope and acknowledge that <strong>domain registration is provided by the client</strong>, with free hosting included with the website package.
+            </label>
+          </div>
+          <div id="terms-error" class="checkout-error-text" style="margin-top: 0.35rem;" role="alert" aria-live="polite"></div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: Persistent Final Order Summary -->
+      <aside class="checkout-sidebar" aria-label="Final order summary sidebar">
+        <div class="order-summary-card">
+          <div class="summary-card-header">
+            <h3 class="summary-card-title">Final Order Summary</h3>
+            <a href="order.html" class="change-package-btn" style="font-size: 0.75rem;">Edit Order</a>
+          </div>
+
+          <div id="checkout-summary-items" class="summary-items-list">
+            <!-- Dynamically populated from checkout state -->
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-item-row" style="margin-bottom: 0.5rem;">
+            <span class="summary-item-name">Subtotal</span>
+            <span class="summary-item-price" id="checkout-summary-subtotal">$0.00</span>
+          </div>
+
+          <div class="summary-item-row" style="margin-bottom: 1rem;">
+            <span class="summary-item-name" style="color: var(--color-sage);">Taxes &amp; Fees</span>
+            <span class="summary-item-price" style="color: var(--color-sage); font-weight: normal;">$0.00</span>
+          </div>
+
+          <div class="summary-total-row">
+            <span class="summary-total-label">Total Amount</span>
+            <div class="summary-total-figure">
+              <div class="summary-total-amount" id="checkout-summary-total">$0.00</div>
+              <span class="summary-total-currency">USD &bull; SETTLED IN USD</span>
+            </div>
+          </div>
+
+          <div class="summary-cta-wrap">
+            <button type="submit" id="pay-submit-btn" class="btn btn-primary btn-large">
+              <span>PAY <span id="pay-btn-amount">$100.00</span></span>
+              <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+            </button>
+            <div class="summary-security-note">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Encrypted connection. Server-enforced total.</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </form>
+  </main>
+
+  <!-- Client-side Logic Script Module -->
+  <script type="module">
+    import { initCheckoutPage } from './js/checkout.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      initCheckoutPage();
+    });
+  </script>
+</body>
+</html>

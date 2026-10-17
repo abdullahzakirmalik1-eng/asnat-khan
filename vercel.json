@@ -7,7 +7,19 @@
     { "source": "/services", "destination": "/services.html" },
     { "source": "/get-quote", "destination": "/get-quote.html" },
     { "source": "/quote", "destination": "/get-quote.html" },
-    { "source": "/api/quote", "destination": "/api/quote.js" }
+    { "source": "/order", "destination": "/order.html" },
+    { "source": "/checkout", "destination": "/checkout.html" },
+    { "source": "/order-confirmation", "destination": "/order-confirmation.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/forgot-password", "destination": "/forgot-password.html" },
+    { "source": "/reset-password", "destination": "/reset-password.html" },
+    { "source": "/verify-email", "destination": "/verify-email.html" },
+    { "source": "/api/quote", "destination": "/api/quote.js" },
+    { "source": "/api/order", "destination": "/api/order.js" },
+    { "source": "/api/checkout", "destination": "/api/checkout.js" },
+    { "source": "/api/verify", "destination": "/api/verify.js" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" }
   ],
   "headers": [
     {

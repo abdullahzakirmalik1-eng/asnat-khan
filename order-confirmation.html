@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Verified order confirmation and next steps for your website project with Asnat Khan.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-confirmation">
+
+  <!-- Minimal Checkout Header -->
+  <header class="checkout-header" id="checkout-header">
+    <div class="container checkout-header-inner">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <div class="checkout-header-actions">
+        <a href="services.html" class="checkout-back-link" aria-label="Return to services">
+          Services
+        </a>
+        <a href="index.html" class="checkout-back-link" aria-label="Return to home">
+          Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Stepper: 01 ORDER DETAILS → 02 CHECKOUT → 03 CONFIRMATION -->
+  <div class="checkout-stepper-wrap" aria-label="Checkout Progress">
+    <div class="container">
+      <nav class="checkout-stepper" aria-label="Checkout stages">
+        <div class="stepper-step completed">
+          <span class="stepper-num">&#10003;</span>
+          <span>ORDER DETAILS</span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step completed">
+          <span class="stepper-num">&#10003;</span>
+          <span>CHECKOUT</span>
+        </div>
+        <span class="stepper-arrow" aria-hidden="true">&rarr;</span>
+        <div class="stepper-step active" aria-current="step">
+          <span class="stepper-num">03</span>
+          <span>CONFIRMATION</span>
+          <span class="stepper-gold-dot" aria-hidden="true"></span>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main id="main-content" class="container confirmation-container">
+    <!-- Dynamic Confirmation View injected and verified by checkout.js -->
+    <div id="confirmation-view">
+      <!-- Loading state during server verification -->
+      <div class="confirmation-card text-center" style="padding: 3.5rem;">
+        <div class="stepper-gold-dot" style="width: 14px; height: 14px; margin: 0 auto 1.5rem; animation: pulse 1s infinite;"></div>
+        <h2 style="font-size: 1.5rem; color: var(--color-silver);">Verifying Order with Server...</h2>
+        <p style="color: var(--color-sage); margin-top: 0.5rem;">Authenticating payment record with database.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Client-side Logic Script Module -->
+  <script type="module">
+    import { initConfirmationPage } from './js/checkout.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      initConfirmationPage();
+    });
+  </script>
+</body>
+</html>

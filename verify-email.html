@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification — Asnat Khan | Personal Digital Studio</title>
+  <meta name="description" content="Verify your email address to secure your Asnat Khan customer account.">
+  
+  <!-- Favicon / SVG Mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+
+  <!-- Simplified Header -->
+  <header class="auth-header" role="banner">
+    <div class="auth-header-container">
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Studio Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <nav class="auth-header-nav" aria-label="Authentication navigation">
+        <a href="services.html">Services</a>
+        <a href="login.html" class="auth-header-action-link" data-auth-crosslink aria-label="Sign in to your account">Sign In</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="auth-main" id="main-content">
+    <div class="auth-layout-grid">
+      
+      <!-- Left Editorial Panel -->
+      <aside class="auth-editorial-panel" aria-label="Email verification guidance">
+        <div>
+          <span class="auth-editorial-badge">
+            <span class="logo-dot" aria-hidden="true"></span> Identity Safeguard
+          </span>
+          <h2 class="auth-editorial-title">Verification for Private Access.</h2>
+          <p class="auth-editorial-desc">
+            Email verification confirms your authorized receipt of invoices, project code repositories, and production staging environments.
+          </p>
+
+          <ul class="auth-trust-list">
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span>Instant email delivery via secure Firebase SMTP</span>
+            </li>
+            <li class="auth-trust-item">
+              <svg class="auth-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Protects project files and proprietary client assets</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="auth-editorial-quote">
+          &ldquo;Every client space is built for confidentiality and trust.&rdquo; &mdash; Asnat Khan
+        </div>
+      </aside>
+
+      <!-- Right Action Card -->
+      <section class="auth-form-card" aria-labelledby="verify-heading">
+        
+        <header class="auth-form-header">
+          <span class="auth-eyebrow">ONE QUICK STEP</span>
+          <h1 class="auth-heading" id="verify-heading">Verify Your Email.</h1>
+          <p class="auth-subcopy">
+            Please verify your email address to help keep your account secure. Follow the instructions in your verification email, then return here to continue.
+          </p>
+        </header>
+
+        <!-- Status Alert Banner -->
+        <div id="verify-status-alert" class="auth-status-alert" role="alert" aria-live="assertive"></div>
+
+        <!-- Verification Actions -->
+        <div class="auth-verification-actions" style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1rem;">
+          <button type="button" id="check-verify-btn" class="btn-auth-primary">
+            I&rsquo;VE VERIFIED MY EMAIL &rarr;
+          </button>
+
+          <button type="button" id="resend-verify-btn" class="btn-auth-secondary">
+            RESEND VERIFICATION EMAIL
+          </button>
+
+          <a href="login.html" class="btn-auth-secondary" data-auth-crosslink style="margin-top: 0;">
+            BACK TO LOGIN
+          </a>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Simplified Footer -->
+  <footer class="auth-footer" role="contentinfo">
+    <div class="auth-footer-inner">
+      <div>&copy; 2026 Asnat Khan. All rights reserved.</div>
+      <div class="auth-footer-links">
+        <a href="services.html">Services</a>
+        <a href="index.html">Studio Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Script Module -->
+  <script type="module" src="js/auth/auth-ui.js"></script>
+</body>
+</html>
