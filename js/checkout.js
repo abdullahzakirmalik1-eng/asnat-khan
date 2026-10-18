@@ -461,10 +461,15 @@ export function initCheckoutPage() {
   }
 
   // Render Persistent Order Summary
+  const cartItems = (state.cartItems && state.cartItems.length > 0)
+    ? state.cartItems
+    : (typeof window !== 'undefined' && window.ASNAT_CART ? window.ASNAT_CART.getCartItems() : []);
+
   const calculation = calculateOrderPricing({
     packageId: state.packageId,
     additionalProducts: state.additionalProducts,
-    additionalServices: state.additionalServices
+    additionalServices: state.additionalServices,
+    cartItems: (cartItems && cartItems.length > 0) ? cartItems : null
   });
 
   if (summaryItemsContainer) {
@@ -560,10 +565,11 @@ export function initCheckoutPage() {
             packageId: state.packageId,
             additionalProducts: state.additionalProducts,
             additionalServices: state.additionalServices,
-            projectName: state.project.name,
+            cartItems: (cartItems && cartItems.length > 0) ? cartItems : undefined,
+            projectName: state.project.name || (cartItems && cartItems.length > 0 ? 'Custom Cart Project' : 'Website Project'),
             brandName: state.project.brand,
             websiteUrl: state.project.website,
-            projectDescription: state.project.description || 'Website project order',
+            projectDescription: state.project.description || (cartItems && cartItems.length > 0 ? `Cart order with ${cartItems.length} item(s)` : 'Website project order'),
             customerName: state.customer.name,
             customerEmail: state.customer.email,
             customerCountry: state.customer.country,
@@ -706,6 +712,11 @@ export async function initConfirmationPage() {
 
     // Render the truthful status state
     if (order.paymentStatus === 'paid' || verified) {
+      if (typeof window !== 'undefined' && window.ASNAT_CART) {
+        window.ASNAT_CART.clearCart();
+      } else {
+        try { localStorage.removeItem('asnat_cart_v1'); } catch (e) {}
+      }
       renderSuccessState(container, order);
     } else if (order.paymentStatus === 'processing' || order.paymentStatus === 'pending') {
       renderProcessingState(container, order);
@@ -806,6 +817,20 @@ function renderSuccessState(container, order) {
           <span class="detail-label">Confirmation &amp; Updates Sent To</span>
           <span class="detail-value" style="color: var(--color-gold-highlight); font-size: 0.95rem;">${escapeHtml(order.customerEmail || order.customer_email)}</span>
         </div>
+
+        ${((order.line_items && order.line_items.length > 1) || (order.lineItems && order.lineItems.length > 1)) ? `
+          <div class="detail-cell" style="margin-top: 0.75rem; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+            <span class="detail-label">Purchased Services (${(order.line_items || order.lineItems).length})</span>
+            <div style="margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.35rem;">
+              ${(order.line_items || order.lineItems).map(li => `
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-silver);">
+                  <span>${escapeHtml(li.name)} ${li.quantity > 1 ? `&times; ${li.quantity}` : ''}</span>
+                  <span style="color: var(--color-gold-highlight); font-weight: 500;">$${Number(li.amount).toFixed(2)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
       </div>
 
       <!-- Action Required Alert: Clarification Request -->

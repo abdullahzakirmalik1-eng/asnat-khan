@@ -236,69 +236,145 @@ while ($listener.IsListening) {
                     $bodyStr = $reader.ReadToEnd()
                     $body = ConvertFrom-Json $bodyStr
 
-                    $pkgId = if ($body.packageId) { ($body.packageId).ToString().ToLower().Trim() } else { "basic" }
-                    $pkgName = "Basic"
-                    $pkgPrice = 50.00
-                    $lineItems = @()
+                    $hasCart = ($body.cartItems -and ($body.cartItems.Count -gt 0 -or $body.cartItems.Length -gt 0))
 
-                    if ($pkgId -eq "standard") {
-                        $pkgName = "Standard"
-                        $pkgPrice = 100.00
-                    } elseif ($pkgId -eq "ecommerce") {
-                        $pkgName = "E-Commerce"
-                        $pkgPrice = 200.00
-                    } elseif ($pkgId -eq "pitchdeck") {
-                        $pkgName = "Pitch Deck Design"
-                        $pkgPrice = 50.00
-                    } elseif ($pkgId -eq "writing") {
-                        $pkgName = "Article Writing"
-                        $pkgPrice = 10.00
-                    }
+                    if ($hasCart) {
+                        $subtotal = 0.00
+                        $lineItems = @()
+                        $pkgName = "Custom Cart Order"
+                        $pkgId = "cart"
+                        $pkgPrice = 0.00
+                        $addQty = 0
+                        $addCost = 0.00
+                        $addedServices = @()
 
-                    $lineItems += @{
-                        type = "package"
-                        id = $pkgId
-                        name = $pkgName
-                        unitPrice = $pkgPrice
-                        quantity = 1
-                        amount = $pkgPrice
-                    }
-                    $subtotal = $pkgPrice
+                        foreach ($cItem in $body.cartItems) {
+                            $cId = ($cItem.id).ToString().ToLower().Trim()
+                            $cQty = if ($cItem.quantity) { [Math]::Max(1, [int]$cItem.quantity) } else { 1 }
+                            $cUnitPrice = 0.00
+                            $cName = if ($cItem.name) { $cItem.name } else { $cId }
 
-                    $addQty = 0
-                    $addCost = 0.00
-                    if ($pkgId -eq "ecommerce" -and $body.additionalProducts) {
-                        $addQty = [Math]::Max(0, [int]$body.additionalProducts)
-                        if ($addQty -gt 0) {
-                            $addCost = [double]$addQty * 1.00
-                            $subtotal += $addCost
+                            if ($cId -eq "basic") {
+                                $cUnitPrice = 50.00
+                                $cName = "Basic Website"
+                                if ($pkgId -eq "cart") { $pkgId = "basic"; $pkgName = $cName; $pkgPrice = 50.00 }
+                            } elseif ($cId -eq "standard") {
+                                $cUnitPrice = 100.00
+                                $cName = "Standard Website"
+                                if ($pkgId -eq "cart") { $pkgId = "standard"; $pkgName = $cName; $pkgPrice = 100.00 }
+                            } elseif ($cId -eq "ecommerce") {
+                                $cUnitPrice = 200.00
+                                $cName = "E-Commerce Website"
+                                if ($pkgId -eq "cart") { $pkgId = "ecommerce"; $pkgName = $cName; $pkgPrice = 200.00 }
+                            } elseif ($cId -eq "pitchdeck") {
+                                $cUnitPrice = 50.00
+                                $cName = "Pitch Deck Design"
+                                $addedServices += @{ id = "pitchdeck"; name = "Pitch Deck Design"; amount = (50.00 * $cQty) }
+                            } elseif ($cId -eq "writing") {
+                                $cUnitPrice = 10.00
+                                $cName = "Article Writing"
+                                if ($cItem.options -and $cItem.options.words) {
+                                    $cQty = [Math]::Max(1, [int][Math]::Ceiling([double]$cItem.options.words / 1000.0))
+                                }
+                                $addedServices += @{ id = "writing"; name = "Article Writing"; units = $cQty; amount = (10.00 * $cQty) }
+                            }
+
+                            $itemTotal = [double]$cUnitPrice * $cQty
+                            $subtotal += $itemTotal
+
                             $lineItems += @{
-                                type = "addon_products"
-                                id = "ecommerce_extra_products"
-                                name = "Additional E-Commerce Products"
-                                description = "$addQty additional products ($1.00 each)"
-                                unitPrice = 1.00
-                                quantity = $addQty
-                                amount = $addCost
+                                type = "cart_item"
+                                id = $cId
+                                name = $cName
+                                unitPrice = $cUnitPrice
+                                quantity = $cQty
+                                amount = $itemTotal
+                            }
+
+                            if ($cId -eq "ecommerce" -and $cItem.options -and $cItem.options.additionalProducts) {
+                                $extraCount = [Math]::Max(0, [int]$cItem.options.additionalProducts)
+                                if ($extraCount -gt 0) {
+                                    $extraCost = [double]$extraCount * 1.00
+                                    $subtotal += $extraCost
+                                    $addQty += $extraCount
+                                    $addCost += $extraCost
+                                    $lineItems += @{
+                                        type = "addon_products"
+                                        id = "ecommerce_extra_products"
+                                        name = "Additional E-Commerce Products"
+                                        description = "$extraCount additional products ($1.00 each)"
+                                        unitPrice = 1.00
+                                        quantity = $extraCount
+                                        amount = $extraCost
+                                    }
+                                }
                             }
                         }
-                    }
+                    } else {
+                        $pkgId = if ($body.packageId) { ($body.packageId).ToString().ToLower().Trim() } else { "basic" }
+                        $pkgName = "Basic"
+                        $pkgPrice = 50.00
+                        $lineItems = @()
 
-                    $addedServices = @()
-                    if ($body.additionalServices) {
-                        foreach ($svc in $body.additionalServices) {
-                            $sId = if ($svc -is [string]) { $svc.ToLower() } else { $svc.id.ToLower() }
-                            if ($sId -eq "pitchdeck" -and $pkgId -ne "pitchdeck") {
-                                $subtotal += 50.00
-                                $addedServices += @{ id = "pitchdeck"; name = "Pitch Deck Design"; amount = 50.00 }
-                                $lineItems += @{ type = "addon_service"; id = "pitchdeck"; name = "Pitch Deck Design"; unitPrice = 50.00; quantity = 1; amount = 50.00 }
-                            } elseif ($sId -eq "writing" -and $pkgId -ne "writing") {
-                                $units = 1
-                                if ($svc.units) { $units = [Math]::Max(1, [int]$svc.units) }
-                                $wCost = [double]$units * 10.00
-                                $subtotal += $wCost
-                                $addedServices += @{ id = "writing"; name = "Article Writing"; units = $units; amount = $wCost }
-                                $lineItems += @{ type = "addon_service"; id = "writing"; name = "Article Writing"; unitPrice = 10.00; quantity = $units; amount = $wCost }
+                        if ($pkgId -eq "standard") {
+                            $pkgName = "Standard"
+                            $pkgPrice = 100.00
+                        } elseif ($pkgId -eq "ecommerce") {
+                            $pkgName = "E-Commerce"
+                            $pkgPrice = 200.00
+                        } elseif ($pkgId -eq "pitchdeck") {
+                            $pkgName = "Pitch Deck Design"
+                            $pkgPrice = 50.00
+                        } elseif ($pkgId -eq "writing") {
+                            $pkgName = "Article Writing"
+                            $pkgPrice = 10.00
+                        }
+
+                        $lineItems += @{
+                            type = "package"
+                            id = $pkgId
+                            name = $pkgName
+                            unitPrice = $pkgPrice
+                            quantity = 1
+                            amount = $pkgPrice
+                        }
+                        $subtotal = $pkgPrice
+
+                        $addQty = 0
+                        $addCost = 0.00
+                        if ($pkgId -eq "ecommerce" -and $body.additionalProducts) {
+                            $addQty = [Math]::Max(0, [int]$body.additionalProducts)
+                            if ($addQty -gt 0) {
+                                $addCost = [double]$addQty * 1.00
+                                $subtotal += $addCost
+                                $lineItems += @{
+                                    type = "addon_products"
+                                    id = "ecommerce_extra_products"
+                                    name = "Additional E-Commerce Products"
+                                    description = "$addQty additional products ($1.00 each)"
+                                    unitPrice = 1.00
+                                    quantity = $addQty
+                                    amount = $addCost
+                                }
+                            }
+                        }
+
+                        $addedServices = @()
+                        if ($body.additionalServices) {
+                            foreach ($svc in $body.additionalServices) {
+                                $sId = if ($svc -is [string]) { $svc.ToLower() } else { $svc.id.ToLower() }
+                                if ($sId -eq "pitchdeck" -and $pkgId -ne "pitchdeck") {
+                                    $subtotal += 50.00
+                                    $addedServices += @{ id = "pitchdeck"; name = "Pitch Deck Design"; amount = 50.00 }
+                                    $lineItems += @{ type = "addon_service"; id = "pitchdeck"; name = "Pitch Deck Design"; unitPrice = 50.00; quantity = 1; amount = 50.00 }
+                                } elseif ($sId -eq "writing" -and $pkgId -ne "writing") {
+                                    $units = 1
+                                    if ($svc.units) { $units = [Math]::Max(1, [int]$svc.units) }
+                                    $wCost = [double]$units * 10.00
+                                    $subtotal += $wCost
+                                    $addedServices += @{ id = "writing"; name = "Article Writing"; units = $units; amount = $wCost }
+                                    $lineItems += @{ type = "addon_service"; id = "writing"; name = "Article Writing"; unitPrice = 10.00; quantity = $units; amount = $wCost }
+                                }
                             }
                         }
                     }
@@ -604,6 +680,8 @@ while ($listener.IsListening) {
             $path = "/founder-story.html"
         } elseif ($path -eq "/services" -or $path -eq "/services/") {
             $path = "/services.html"
+        } elseif ($path -eq "/cart" -or $path -eq "/cart/") {
+            $path = "/cart.html"
         } elseif ($path -eq "/get-quote" -or $path -eq "/get-quote/" -or $path -eq "/quote" -or $path -eq "/quote/") {
             $path = "/get-quote.html"
         } elseif ($path -eq "/order" -or $path -eq "/order/") {

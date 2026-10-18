@@ -48,7 +48,7 @@ async function runAdminTests() {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const ent of entries) {
       if (['node_modules', '.git', '.vercel'].includes(ent.name)) continue;
-      if (ent.name === 'test_admin.js') continue; // Skip test file itself
+      if (ent.name.startsWith('test_')) continue; // Skip test files themselves
       const fullPath = path.join(dir, ent.name);
       if (ent.isDirectory()) {
         scanFilesForColor(fullPath);

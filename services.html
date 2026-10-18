@@ -41,6 +41,7 @@
           <li><a href="services.html" class="nav-link active">Services</a></li>
           <li><a href="index.html#portfolio" class="nav-link">Portfolio</a></li>
           <li><a href="order.html" class="nav-link">Order</a></li>
+          <li><a href="cart.html" class="nav-link">Cart</a></li>
           <li><a href="get-quote.html" class="nav-link">Get Quote</a></li>
           <li><a href="login.html" class="nav-link">Sign In</a></li>
         </ul>
@@ -48,6 +49,16 @@
 
       <!-- Right: Primary CTA & Mobile Toggle -->
       <div class="header-actions">
+        <a href="cart.html" class="header-cart-btn" aria-label="View shopping cart" id="header-cart-btn">
+          <svg class="cart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-label">Cart</span>
+          <span class="cart-badge" id="header-cart-badge" aria-hidden="true" style="display: none;">0</span>
+        </a>
+
         <a href="get-quote.html" class="btn btn-primary nav-cta" aria-label="Start a project">
           <span>START A PROJECT</span>
           <span class="btn-arrow" aria-hidden="true">→</span>
@@ -79,6 +90,7 @@
           <li><a href="services.html" class="drawer-link active">Services</a></li>
           <li><a href="index.html#portfolio" class="drawer-link">Portfolio</a></li>
           <li><a href="order.html" class="drawer-link">Order</a></li>
+          <li><a href="cart.html" class="drawer-link drawer-cart-link"><span>Cart</span><span class="drawer-cart-badge" id="drawer-cart-badge" style="display: none;">0</span></a></li>
           <li><a href="get-quote.html" class="drawer-link">Get Quote</a></li>
           <li><a href="login.html" class="drawer-link">Sign In</a></li>
         </ul>
@@ -284,10 +296,16 @@
               Best for basic business websites
             </div>
 
-            <a href="order.html?package=basic" class="btn btn-secondary" data-package="basic" aria-label="Choose Basic Package">
-              <span>CHOOSE BASIC</span>
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
+            <div class="package-cta-group">
+              <button type="button" class="btn btn-primary add-to-cart-btn" data-add-cart="basic" data-add-to-cart="basic" aria-label="Add Basic Package to Cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>ADD TO CART</span>
+              </button>
+              <a href="order.html?package=basic" class="btn btn-secondary" data-package="basic" aria-label="Choose Basic Package">
+                <span>CHOOSE BASIC</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
           </article>
 
 
@@ -350,10 +368,16 @@
               Best for businesses that need online transactions
             </div>
 
-            <a href="order.html?package=standard" class="btn btn-primary" data-package="standard" aria-label="Choose Standard Package">
-              <span>CHOOSE STANDARD</span>
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
+            <div class="package-cta-group">
+              <button type="button" class="btn btn-primary add-to-cart-btn" data-add-cart="standard" data-add-to-cart="standard" aria-label="Add Standard Package to Cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>ADD TO CART</span>
+              </button>
+              <a href="order.html?package=standard" class="btn btn-secondary" data-package="standard" aria-label="Choose Standard Package">
+                <span>CHOOSE STANDARD</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
           </article>
 
 
@@ -417,10 +441,16 @@
               <strong>Additional products:</strong> $1 per product
             </div>
 
-            <a href="order.html?package=ecommerce" class="btn btn-secondary" data-package="ecommerce" aria-label="Choose E-Commerce Package">
-              <span>CHOOSE E-COMMERCE</span>
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
+            <div class="package-cta-group">
+              <button type="button" class="btn btn-primary add-to-cart-btn" data-add-cart="ecommerce" data-add-to-cart="ecommerce" aria-label="Add E-Commerce Package to Cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>ADD TO CART</span>
+              </button>
+              <a href="order.html?package=ecommerce" class="btn btn-secondary" data-package="ecommerce" aria-label="Choose E-Commerce Package">
+                <span>CHOOSE E-COMMERCE</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
           </article>
 
         </div>
@@ -584,10 +614,16 @@
               </div>
             </div>
 
-            <a href="order.html?package=pitchdeck" class="btn btn-secondary" data-package="pitchdeck" aria-label="Get Started with Pitch Deck Design">
-              <span>GET STARTED</span>
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
+            <div class="package-cta-group">
+              <button type="button" class="btn btn-primary add-to-cart-btn" data-add-cart="pitchdeck" data-add-to-cart="pitchdeck" aria-label="Add Pitch Deck Design to Cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>ADD TO CART</span>
+              </button>
+              <a href="order.html?package=pitchdeck" class="btn btn-secondary" data-package="pitchdeck" aria-label="Get Started with Pitch Deck Design">
+                <span>GET STARTED</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
           </article>
 
           <!-- Article Writing -->
@@ -608,10 +644,16 @@
               </div>
             </div>
 
-            <a href="order.html?package=writing" class="btn btn-secondary" data-package="writing" aria-label="Get Started with Article Writing">
-              <span>GET STARTED</span>
-              <span class="btn-arrow" aria-hidden="true">→</span>
-            </a>
+            <div class="package-cta-group">
+              <button type="button" class="btn btn-primary add-to-cart-btn" data-add-cart="writing" data-add-to-cart="writing" data-cart-units="1" aria-label="Add Article Writing to Cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>ADD TO CART</span>
+              </button>
+              <a href="order.html?package=writing" class="btn btn-secondary" data-package="writing" aria-label="Get Started with Article Writing">
+                <span>GET STARTED</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
           </article>
 
         </div>
@@ -1127,6 +1169,9 @@
 
   <!-- Main JavaScript File -->
   <script src="js/main.js"></script>
+
+  <!-- Shopping Cart Script -->
+  <script type="module" src="js/cart.js"></script>
 
 </body>
 </html>

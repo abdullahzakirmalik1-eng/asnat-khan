@@ -294,6 +294,7 @@ export default async function handler(req, res) {
         packageId = 'basic',
         additionalProducts = 0,
         additionalServices = [],
+        cartItems = null,
         projectName = '',
         brandName = '',
         websiteUrl = '',
@@ -310,19 +311,17 @@ export default async function handler(req, res) {
         accessToken: providedToken = ''
       } = body;
 
-      // Validate required fields
-      if (!projectDescription || !projectDescription.trim()) {
-        return res.status(400).json({
-          success: false,
-          error: 'A brief project description is required.'
-        });
-      }
+      const hasCart = Array.isArray(cartItems) && cartItems.length > 0;
+      const effectiveDescription = (projectDescription && projectDescription.trim())
+        ? projectDescription.trim()
+        : (hasCart ? `Custom Cart Order (${cartItems.length} service${cartItems.length > 1 ? 's' : ''})` : 'Website Project Order');
 
       // Authoritative server-side price calculation
       const calculated = calculateOrderPricing({
         packageId,
         additionalProducts,
-        additionalServices
+        additionalServices,
+        cartItems: hasCart ? cartItems : null
       });
 
       const orderId = existingOrderId || `ord_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
@@ -338,17 +337,17 @@ export default async function handler(req, res) {
         customer_country: customerCountry || '',
         customer_business: customerBusiness || brandName || '',
         billing_address: billingAddress || {},
-        package_id: calculated.package.id,
-        package_name: calculated.package.name,
-        package_price: calculated.package.price,
-        additional_products_count: calculated.additionalProducts,
-        additional_products_cost: calculated.additionalProductsCost,
-        additional_services: calculated.additionalServices,
+        package_id: calculated.package ? calculated.package.id : (packageId || 'custom_cart'),
+        package_name: calculated.package ? calculated.package.name : 'Custom Cart Order',
+        package_price: calculated.package ? calculated.package.price : calculated.subtotal,
+        additional_products_count: calculated.additionalProducts || 0,
+        additional_products_cost: calculated.additionalProductsCost || 0,
+        additional_services: calculated.additionalServices || [],
         line_items: calculated.lineItems,
-        project_name: projectName || '',
+        project_name: projectName || (hasCart ? 'Custom Cart Project' : ''),
         brand_name: brandName || '',
         website_url: websiteUrl || '',
-        project_description: projectDescription.trim(),
+        project_description: effectiveDescription,
         project_goals: projectGoals || '',
         project_references: projectReferences || '',
         special_requirements: specialRequirements || '',
@@ -363,7 +362,8 @@ export default async function handler(req, res) {
         access_token: accessToken,
         metadata: {
           clientIp: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
-          userAgent: req.headers['user-agent']
+          userAgent: req.headers['user-agent'],
+          cart_items: hasCart ? cartItems : null
         },
         updated_at: new Date().toISOString()
       };
@@ -386,12 +386,12 @@ export default async function handler(req, res) {
         order: {
           id: orderId,
           orderRef: orderRef,
-          packageId: calculated.package.id,
-          packageName: calculated.package.name,
-          packagePrice: calculated.package.price,
-          additionalProductsCount: calculated.additionalProducts,
-          additionalProductsCost: calculated.additionalProductsCost,
-          additionalServices: calculated.additionalServices,
+          packageId: calculated.package ? calculated.package.id : (packageId || 'custom_cart'),
+          packageName: calculated.package ? calculated.package.name : 'Custom Cart Order',
+          packagePrice: calculated.package ? calculated.package.price : calculated.subtotal,
+          additionalProductsCount: calculated.additionalProducts || 0,
+          additionalProductsCost: calculated.additionalProductsCost || 0,
+          additionalServices: calculated.additionalServices || [],
           lineItems: calculated.lineItems,
           subtotal: calculated.subtotal,
           taxAmount: calculated.taxAmount,

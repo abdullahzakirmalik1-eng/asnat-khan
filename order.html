@@ -32,7 +32,16 @@
 
       <div class="checkout-header-actions">
         <a href="services.html" class="checkout-back-link" aria-label="Return to services page">
-          <span aria-hidden="true">&larr;</span> Back to Services
+          <span aria-hidden="true">&larr;</span> Services
+        </a>
+        <a href="cart.html" class="header-cart-btn" aria-label="View shopping cart" id="header-cart-btn">
+          <svg class="cart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-label">Cart</span>
+          <span class="cart-badge" id="header-cart-badge" aria-hidden="true" style="display: none;">0</span>
         </a>
         <div class="checkout-secure-badge" aria-label="Secure checkout transaction">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -345,6 +354,7 @@
   </div>
 
   <!-- Client-side Logic Script Module -->
+  <script type="module" src="js/cart.js"></script>
   <script type="module">
     import { initOrderDetailsPage } from './js/checkout.js';
     document.addEventListener('DOMContentLoaded', () => {

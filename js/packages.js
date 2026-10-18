@@ -110,25 +110,189 @@ export const ADDITIONAL_SERVICES = {
 
 export const DOMAIN_HOSTING_NOTE = {
   title: 'Domain & Hosting',
-  statement: 'You provide the domain name you want to use. Free hosting is included with your website package. We can help with domain setup and connection.',
-  fullClarification: 'The client provides or purchases their own domain name. Free hosting is included with the website package. We can help with domain setup and connection.'
+  statement: 'You provide and purchase your own domain name. Free hosting is included with your website package. We can help you connect your domain to your website.',
+  fullClarification: 'You provide and purchase your own domain name. Free hosting is included with your website package. We can help you connect your domain to your website.'
 };
+
+/**
+ * Authoritative Server & Client Cart Calculation Function
+ * Computes verified line items, subtotal, and total amount for a shopping cart.
+ * 
+ * @param {Array<Object>} cartItems
+ * @returns {Object} Verified pricing breakdown
+ */
+export function calculateCartPricing(cartItems = []) {
+  if (!Array.isArray(cartItems) || cartItems.length === 0) {
+    return {
+      items: [],
+      lineItems: [],
+      package: PACKAGES.basic,
+      hasWebsitePackage: false,
+      additionalProducts: 0,
+      additionalProductsCost: 0,
+      additionalServices: [],
+      subtotal: 0,
+      taxAmount: 0,
+      totalAmount: 0,
+      currency: 'USD',
+      domainNote: DOMAIN_HOSTING_NOTE
+    };
+  }
+
+  const lineItems = [];
+  let subtotal = 0;
+  let hasWebsitePackage = false;
+  let primaryPackage = null;
+  const additionalServices = [];
+  let additionalProductsCount = 0;
+  let additionalProductsCost = 0;
+
+  for (const item of cartItems) {
+    const rawId = (item.id || item.packageId || '').toLowerCase().trim();
+    if (!rawId) continue;
+
+    // 1. Check Website Packages
+    if (PACKAGES[rawId]) {
+      const pkg = PACKAGES[rawId];
+      hasWebsitePackage = true;
+      if (!primaryPackage) primaryPackage = pkg;
+
+      const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+      const itemAmount = pkg.price * qty;
+
+      lineItems.push({
+        type: 'package',
+        id: pkg.id,
+        name: `${pkg.name} Website`,
+        tier: pkg.tier,
+        description: pkg.description,
+        unitPrice: pkg.price,
+        quantity: qty,
+        amount: itemAmount,
+        inclusions: pkg.inclusions,
+        hasPayment: pkg.hasPayment,
+        hasEcommerce: pkg.hasEcommerce
+      });
+      subtotal += itemAmount;
+
+      // Check additional products for e-commerce
+      const extraProducts = parseInt(item.additionalProducts || item.options?.additionalProducts, 10);
+      if (pkg.id === 'ecommerce' && !isNaN(extraProducts) && extraProducts > 0) {
+        const cost = extraProducts * 1.00;
+        additionalProductsCount += extraProducts;
+        additionalProductsCost += cost;
+        lineItems.push({
+          type: 'addon_products',
+          id: 'ecommerce_extra_products',
+          name: 'Additional E-Commerce Products',
+          description: `${extraProducts} additional products ($1.00 each, first 10 included)`,
+          unitPrice: 1.00,
+          quantity: extraProducts,
+          amount: cost
+        });
+        subtotal += cost;
+      }
+    }
+    // 2. Check Additional Services
+    else if (ADDITIONAL_SERVICES[rawId]) {
+      const svc = ADDITIONAL_SERVICES[rawId];
+      if (rawId === 'pitchdeck') {
+        const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+        const itemAmount = svc.price * qty;
+        additionalServices.push({ id: 'pitchdeck', name: svc.name, amount: itemAmount });
+        lineItems.push({
+          type: 'addon_service',
+          id: 'pitchdeck',
+          name: svc.name,
+          description: svc.unitLabel,
+          unitPrice: svc.price,
+          quantity: qty,
+          amount: itemAmount
+        });
+        subtotal += itemAmount;
+      } else if (rawId === 'writing') {
+        let units = 1;
+        if (item.units) units = Math.max(1, parseInt(item.units, 10));
+        else if (item.words) units = Math.max(1, Math.ceil(parseInt(item.words, 10) / 1000));
+        else if (item.options?.units) units = Math.max(1, parseInt(item.options.units, 10));
+        else if (item.options?.words) units = Math.max(1, Math.ceil(parseInt(item.options.words, 10) / 1000));
+        else if (item.quantity) units = Math.max(1, parseInt(item.quantity, 10));
+
+        const itemAmount = units * svc.unitPrice;
+        additionalServices.push({
+          id: 'writing',
+          name: svc.name,
+          units: units,
+          words: units * 1000,
+          amount: itemAmount
+        });
+        lineItems.push({
+          type: 'addon_service',
+          id: 'writing',
+          name: svc.name,
+          description: `${(units * 1000).toLocaleString()} words (${units} x 1,000 words at $10/unit)`,
+          unitPrice: svc.unitPrice,
+          quantity: units,
+          amount: itemAmount
+        });
+        subtotal += itemAmount;
+      }
+    }
+  }
+
+  if (!primaryPackage) {
+    if (lineItems.length > 0) {
+      primaryPackage = {
+        id: lineItems[0].id,
+        name: lineItems[0].name,
+        price: lineItems[0].unitPrice
+      };
+    } else {
+      primaryPackage = PACKAGES.basic;
+    }
+  }
+
+  const taxAmount = 0;
+  const totalAmount = subtotal + taxAmount;
+
+  return {
+    package: primaryPackage,
+    hasWebsitePackage,
+    additionalProducts: additionalProductsCount,
+    additionalProductsCost,
+    additionalServices,
+    lineItems,
+    subtotal: Number(subtotal.toFixed(2)),
+    taxAmount: Number(taxAmount.toFixed(2)),
+    totalAmount: Number(totalAmount.toFixed(2)),
+    currency: 'USD',
+    domainNote: DOMAIN_HOSTING_NOTE
+  };
+}
 
 /**
  * Authoritative Server & Client Order Calculation Function
  * Computes verified line items, subtotal, and total amount.
+ * Supports both direct package params and cartItems arrays.
  * 
  * @param {Object} params
- * @param {string} params.packageId - 'basic' | 'standard' | 'ecommerce' | 'pitchdeck' | 'writing'
+ * @param {string} [params.packageId='basic'] - 'basic' | 'standard' | 'ecommerce' | 'pitchdeck' | 'writing'
  * @param {number} [params.additionalProducts=0] - Extra products count (E-Commerce only)
  * @param {Array<Object>} [params.additionalServices=[]] - [{ id: 'pitchdeck' }, { id: 'writing', units: 1, words: 1000 }]
+ * @param {Array<Object>} [params.cartItems] - Optional array of cart items
  * @returns {Object} Verified pricing breakdown
  */
 export function calculateOrderPricing({
   packageId = 'basic',
   additionalProducts = 0,
-  additionalServices = []
-}) {
+  additionalServices = [],
+  cartItems = null
+} = {}) {
+  // If cartItems array provided and not empty, calculate through cart pricing engine
+  if (cartItems && Array.isArray(cartItems) && cartItems.length > 0) {
+    return calculateCartPricing(cartItems);
+  }
+
   const lineItems = [];
   let subtotal = 0;
   const normalizedPkgId = (packageId || '').toLowerCase().trim();
@@ -289,6 +453,7 @@ if (typeof window !== 'undefined') {
     PACKAGES,
     ADDITIONAL_SERVICES,
     DOMAIN_HOSTING_NOTE,
-    calculateOrderPricing
+    calculateOrderPricing,
+    calculateCartPricing
   };
 }
