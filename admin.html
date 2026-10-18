@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Workspace — Asnat Khan Studio</title>
+  <meta name="description" content="Private administrator panel for order management, client requirements, milestones, deliverables, and customer communication.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2309110E'/><path d='M8 24L16 8L24 24M11 19H21' stroke='%230A6046' stroke-width='2.5' stroke-linecap='round'/><circle cx='16' cy='12' r='2' fill='%23B08D32'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar" id="admin-sidebar" aria-label="Administrator navigation">
+      <div class="admin-sidebar-brand">
+        <div class="admin-monogram" aria-hidden="true">AK</div>
+        <div class="admin-brand-info">
+          <span class="admin-brand-title">Asnat Khan</span>
+          <span class="admin-brand-badge">ADMIN WORKSPACE</span>
+        </div>
+      </div>
+
+      <nav class="admin-nav" aria-label="Main admin sections">
+        <a href="/admin" class="admin-nav-item active" data-route="overview" id="nav-overview">
+          <span class="admin-nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <span>Overview</span>
+        </a>
+
+        <a href="/admin/orders" class="admin-nav-item" data-route="orders" id="nav-orders">
+          <span class="admin-nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          </span>
+          <span>Orders</span>
+        </a>
+
+        <a href="/admin/customers" class="admin-nav-item" data-route="customers" id="nav-customers">
+          <span class="admin-nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </span>
+          <span>Customers</span>
+        </a>
+
+        <a href="/admin/notifications" class="admin-nav-item" data-route="notifications" id="nav-notifications">
+          <span class="admin-nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          </span>
+          <span>Notifications</span>
+          <span class="admin-nav-badge" id="nav-notif-badge">0</span>
+        </a>
+
+        <a href="/admin/settings" class="admin-nav-item" data-route="settings" id="nav-settings">
+          <span class="admin-nav-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </span>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-card">
+          <div class="admin-avatar">AK</div>
+          <div class="admin-user-info">
+            <span class="admin-user-name">Asnat Khan</span>
+            <span class="admin-user-role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="admin-main-wrap">
+      <!-- Top Bar -->
+      <header class="admin-topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="sidebar-toggle-btn" class="admin-btn admin-btn-sm admin-btn-secondary" aria-label="Toggle navigation menu" style="padding: 0.4rem 0.6rem;">
+            &#9776;
+          </button>
+          <div class="admin-breadcrumbs" id="admin-breadcrumbs" aria-label="Breadcrumb navigation">
+            <a href="/admin">Admin</a> <span class="separator">/</span> <span class="current">Overview</span>
+          </div>
+        </div>
+
+        <div class="admin-topbar-actions">
+          <div class="admin-status-pill" title="Supabase PostgreSQL connected">
+            <span class="admin-status-dot"></span>
+            <span>Database Live</span>
+          </div>
+
+          <a href="/admin/notifications" class="admin-btn admin-btn-sm admin-btn-secondary" style="position: relative;" aria-label="Notifications center">
+            <span aria-hidden="true">🔔</span>
+            <span id="topbar-notif-count" style="font-size: 0.72rem; font-weight: 700; color: var(--admin-gold-highlight); margin-left: 0.2rem;">0</span>
+          </a>
+
+          <a href="/" target="_blank" class="admin-btn admin-btn-sm admin-btn-secondary" title="View live client website">
+            Public Site &UpperRightArrow;
+          </a>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Stage -->
+      <main class="admin-content-stage" id="admin-stage">
+        <!-- Rendered by AdminUI -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Universal Modal Backdrop -->
+  <div class="admin-modal-backdrop" id="admin-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="admin-modal-box">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="modal-title">Modal Title</h3>
+        <button id="modal-close-btn" class="admin-btn admin-btn-sm admin-btn-secondary" aria-label="Close dialog" style="padding: 0.25rem 0.6rem; font-size: 1.1rem; line-height: 1;">
+          &times;
+        </button>
+      </div>
+      <div class="admin-modal-body" id="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="admin-modal-footer" id="modal-footer">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Application Initializer -->
+  <script type="module">
+    import { adminApi } from '/js/admin/admin-api.js';
+    import { AdminRouter } from '/js/admin/admin-router.js';
+    import { AdminUI } from '/js/admin/admin-ui.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Toggle sidebar on mobile/desktop
+      const sidebar = document.getElementById('admin-sidebar');
+      const toggleBtn = document.getElementById('sidebar-toggle-btn');
+      if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('open');
+          } else {
+            sidebar.classList.toggle('collapsed');
+          }
+        });
+      }
+
+      // Initialize UI Controller and Router
+      let ui;
+      const routes = {
+        overview: async () => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderOverview();
+          updateBadges();
+        },
+        orders: async (params) => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderOrders(params);
+          updateBadges();
+        },
+        order_detail: async (params) => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderOrderDetail(params.orderId, params.subtab);
+          updateBadges();
+        },
+        customers: async () => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderCustomers();
+          updateBadges();
+        },
+        notifications: async () => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderNotifications();
+          updateBadges();
+        },
+        settings: async () => {
+          if (!adminApi.isAuthenticated()) {
+            ui.renderLoginScreen();
+            return;
+          }
+          await ui.renderSettings();
+          updateBadges();
+        }
+      };
+
+      const router = new AdminRouter(routes);
+      ui = new AdminUI(router);
+
+      // Verify active session or show login
+      const hasAuth = await adminApi.verifySession();
+      if (!hasAuth) {
+        ui.renderLoginScreen();
+      } else {
+        router.resolveCurrentRoute();
+      }
+
+      // Periodic badge updater
+      async function updateBadges() {
+        if (!adminApi.isAuthenticated()) return;
+        try {
+          const notifs = await adminApi.getNotifications();
+          const unread = notifs.unreadCount || 0;
+          const badge = document.getElementById('nav-notif-badge');
+          const topBadge = document.getElementById('topbar-notif-count');
+          if (badge) badge.textContent = unread;
+          if (topBadge) topBadge.textContent = unread;
+        } catch {}
+      }
+
+      updateBadges();
+    });
+  </script>
+</body>
+</html>

@@ -208,6 +208,11 @@ while ($listener.IsListening) {
                         $resBytes = [System.Text.Encoding]::UTF8.GetBytes('{"success":false,"error":"Unauthorized order access"}')
                         $response.StatusCode = 403
                     } else {
+                        if ($matched.PSObject.Properties['metadata'] -and $matched.metadata) {
+                            if ($matched.metadata.PSObject.Properties['internal_notes']) {
+                                $matched.metadata.PSObject.Properties.Remove('internal_notes')
+                            }
+                        }
                         $payload = @{ success = $true; order = $matched }
                         $resBytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 5))
                         $response.StatusCode = 200
@@ -513,6 +518,86 @@ while ($listener.IsListening) {
             continue
         }
 
+        # API: Admin Management (/api/admin)
+        if ($path -eq "/api/admin") {
+            $response.AddHeader("Access-Control-Allow-Origin", "*")
+            $response.AddHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+            $response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, x-admin-key, X-CSRF-Token")
+
+            if ($request.HttpMethod -eq "OPTIONS") {
+                $response.StatusCode = 204
+                $response.Close()
+                continue
+            }
+
+            try {
+                $reqObj = @{
+                    method = $request.HttpMethod
+                    path = $path
+                    url = $request.Url.PathAndQuery
+                    query = (Get-UrlQueryDict $request.Url.Query)
+                    headers = @{}
+                }
+                foreach ($h in $request.Headers.AllKeys) {
+                    if ($h) {
+                        $reqObj.headers[$h.ToLower()] = $request.Headers[$h]
+                    }
+                }
+                if ($request.HasEntityBody) {
+                    $reader = New-Object System.IO.StreamReader($request.InputStream, [System.Text.Encoding]::UTF8)
+                    $bodyStr = $reader.ReadToEnd()
+                    try {
+                        $reqObj.body = (ConvertFrom-Json $bodyStr)
+                    } catch {
+                        $reqObj.body = $bodyStr
+                    }
+                }
+
+                $jsonInput = ConvertTo-Json $reqObj -Depth 7 -Compress
+                $bridgeScript = Join-Path $root "api\bridge.js"
+                
+                $psi = New-Object System.Diagnostics.ProcessStartInfo
+                $psi.FileName = "node"
+                $psi.Arguments = "`"$bridgeScript`""
+                $psi.WorkingDirectory = $root
+                $psi.RedirectStandardInput = $true
+                $psi.RedirectStandardOutput = $true
+                $psi.RedirectStandardError = $true
+                $psi.UseShellExecute = $false
+                $psi.CreateNoWindow = $true
+
+                $proc = [System.Diagnostics.Process]::Start($psi)
+                $proc.StandardInput.Write($jsonInput)
+                $proc.StandardInput.Flush()
+                $proc.StandardInput.Close()
+
+                $output = $proc.StandardOutput.ReadToEnd()
+                $proc.WaitForExit(8000)
+
+                if ([string]::IsNullOrWhiteSpace($output)) {
+                    $resBytes = [System.Text.Encoding]::UTF8.GetBytes('{"success":false,"error":"Bridge process returned empty response"}')
+                    $response.StatusCode = 500
+                } else {
+                    $bridgeRes = ConvertFrom-Json $output
+                    $response.StatusCode = if ($bridgeRes.statusCode) { [int]$bridgeRes.statusCode } else { 200 }
+                    $payloadJson = ConvertTo-Json $bridgeRes.body -Depth 8
+                    $resBytes = [System.Text.Encoding]::UTF8.GetBytes($payloadJson)
+                }
+            } catch {
+                $errPayload = @{ success = $false; error = $_.Exception.Message }
+                $resBytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $errPayload))
+                $response.StatusCode = 500
+            }
+
+            $response.ContentType = "application/json; charset=utf-8"
+            $response.ContentLength64 = $resBytes.Length
+            $response.OutputStream.Write($resBytes, 0, $resBytes.Length)
+            $response.OutputStream.Flush()
+            $response.OutputStream.Close()
+            $response.Close()
+            continue
+        }
+
         if ($path -eq "/" -or [string]::IsNullOrWhiteSpace($path)) {
             $path = "/index.html"
         } elseif ($path -eq "/founder-story" -or $path -eq "/founder-story/") {
@@ -537,6 +622,8 @@ while ($listener.IsListening) {
             $path = "/reset-password.html"
         } elseif ($path -eq "/verify-email" -or $path -eq "/verify-email/") {
             $path = "/verify-email.html"
+        } elseif ($path -eq "/admin" -or $path -eq "/admin/" -or $path.StartsWith("/admin/")) {
+            $path = "/admin.html"
         }
 
         $relPath = $path.TrimStart('/').Replace('/', '\')

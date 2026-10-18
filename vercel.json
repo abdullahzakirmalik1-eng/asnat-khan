@@ -15,11 +15,14 @@
     { "source": "/forgot-password", "destination": "/forgot-password.html" },
     { "source": "/reset-password", "destination": "/reset-password.html" },
     { "source": "/verify-email", "destination": "/verify-email.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/(.*)", "destination": "/admin.html" },
     { "source": "/api/quote", "destination": "/api/quote.js" },
     { "source": "/api/order", "destination": "/api/order.js" },
     { "source": "/api/checkout", "destination": "/api/checkout.js" },
     { "source": "/api/verify", "destination": "/api/verify.js" },
-    { "source": "/api/webhook", "destination": "/api/webhook.js" }
+    { "source": "/api/webhook", "destination": "/api/webhook.js" },
+    { "source": "/api/admin", "destination": "/api/admin.js" }
   ],
   "headers": [
     {

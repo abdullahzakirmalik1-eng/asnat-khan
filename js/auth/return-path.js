@@ -10,6 +10,7 @@ const ALLOWED_DESTINATION_PREFIXES = [
   '/checkout',
   '/order',
   '/order-confirmation',
+  '/admin',
   '/services',
   '/get-quote',
   '/founder-story',

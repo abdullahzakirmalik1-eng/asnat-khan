@@ -28,16 +28,32 @@ A modern, high-converting portfolio and agency website for **Asnat Khan** (Creat
 - `checkout.html` — Order summary review, billing contact information, and payment gateway selection (Stripe Checkout & instant Test Mode verification).
 - `order-confirmation.html` — Post-payment verification screen, order reference breakdown, tokenized security verification, and next kickoff steps.
 
-### 4. Serverless Backend APIs
+### 4. Admin Workspace & Order Management (`/admin`)
+- **Protected Workspace**: Isolated administrator portal (`admin.html`) with trusted server-side authorization checks on all queries and mutations. Unauthorized visitors receive HTTP 401 and are redirected to the Admin Login screen.
+- **Executive Overview**: Real counts for Total Orders, Paid Orders, In Progress, Awaiting Requirements, Completed Orders, and Pending/Failed Payments, plus an actionable "Needs Attention" queue.
+- **Search & Filtering Registry**: Full search (Order ID, client name, email, package), project status filter (12 stages), payment status filter, package filter, and pagination.
+- **Order Management & Sub-Tabs**:
+  - `Overview & Scope` — Financials, package inclusions, line items, customer profile.
+  - `Progress & Milestones` — 8 production milestones with status toggles (`not_started`, `in_progress`, `completed`, `blocked`), notes, customer updates, and calculated completion percentage.
+  - `Requirements Review` — Client brief review, confirmation, and clarification request builder.
+  - `Files & Deliverables` — Attachment of website deliverables, WIP reviews, and download delivery.
+  - `Messages & Notes` — Direct 2-way customer conversation feed + private internal notes (strictly hidden from customer view).
+  - `Audit Trail` — Chronological log of administrative events.
+- **Customer Directory & Notifications**: Aggregated client directory and real-time notification alerts.
+- **Live Customer Tracker Synchronization**: Customer tracker (`order-confirmation.html`) updates in real time with milestones, updates, clarification requests, and deliverables.
+
+### 5. Serverless Backend APIs
+- `/api/admin` — Protected server-side administrator handler for authentication, orders, status updates, milestones, notes, deliverables, messaging, and metrics.
 - `/api/quote` — Records customer inquiry submissions into Supabase table `quote_inquiries`.
-- `/api/order` — Validates order details, recalculates pricing server-side, generates unique references (`AK-YYYYMMDD-XXXX`) and access tokens, and saves orders to Supabase `orders` table.
+- `/api/order` — Validates order details, recalculates pricing server-side, sanitizes customer responses (zero internal notes leakage), and saves orders to Supabase `orders` table.
 - `/api/checkout` — Generates Stripe Checkout sessions or simulates verified test mode payments.
 - `/api/verify` — Validates order payment status via order ID, access token, or Stripe session reference.
 - `/api/webhook` — Secure Stripe webhook receiver handling asynchronous `checkout.session.completed` events.
 
-### 5. Local Dev Server (`serve.ps1`)
+### 6. Local Dev Server (`serve.ps1`)
 - Zero-dependency PowerShell HTTP server for Windows local preview and full API testing.
-- Clean URL routing (`/order`, `/checkout`, `/order-confirmation`, `/login`, `/register`, etc.).
+- Clean URL routing (`/admin`, `/admin/orders`, `/order`, `/checkout`, `/order-confirmation`, `/login`, etc.).
+- Integrated development bridge executing serverless handlers (`api/bridge.js`).
 - Built-in local fallbacks saving inquiries to `quote_inquiries.json` and orders to `orders.json` when Supabase is unreachable.
 
 ---
@@ -86,6 +102,13 @@ Tests server-side pricing recalculation, order creation, token retrieval, checko
 ```powershell
 powershell -ExecutionPolicy Bypass -File ./test_flow.ps1
 ```
+
+### 3. Admin Workspace & Security Test Suite
+Tests administrator authentication, role verification, order lifecycle transitions, milestone calculations, customer privacy protection (zero internal notes leakage), deliverables, and messaging:
+```bash
+node test_admin.js
+```
+
 
 ---
 

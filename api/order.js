@@ -19,6 +19,26 @@ function generateOrderRef() {
   return `AK-${dateStr}-${randomSuffix}`;
 }
 
+function sanitizeOrderForCustomer(order) {
+  if (!order) return null;
+  const safe = { ...order };
+  if (safe.metadata) {
+    const safeMeta = { ...safe.metadata };
+    // Strictly remove private internal notes from customer visibility
+    delete safeMeta.internal_notes;
+    // Exclude internal-only activity entries
+    if (safeMeta.activity_log && Array.isArray(safeMeta.activity_log)) {
+      safeMeta.activity_log = safeMeta.activity_log.filter(a => a.scope !== 'internal');
+    }
+    // Exclude work-in-progress files meant for internal review
+    if (safeMeta.files && Array.isArray(safeMeta.files)) {
+      safeMeta.files = safeMeta.files.filter(f => f.category !== 'wip');
+    }
+    safe.metadata = safeMeta;
+  }
+  return safe;
+}
+
 export default async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -83,7 +103,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        order
+        order: sanitizeOrderForCustomer(order)
       });
     } catch (err) {
       console.error('[API /api/order GET] Error:', err);
@@ -103,7 +123,7 @@ export default async function handler(req, res) {
         }
       }
 
-      const { id, token, requirements, projectName, websiteUrl, brandName, clientNotes } = body;
+      const { id, token, requirements, projectName, websiteUrl, brandName, clientNotes, action, customerMessage, clarificationResponse } = body;
 
       if (!id) {
         return res.status(400).json({ success: false, error: 'Missing required order id' });
@@ -120,22 +140,116 @@ export default async function handler(req, res) {
         return res.status(404).json({ success: false, error: 'Order not found' });
       }
 
-      // Verify access token if stored
+      // Verify access token
       if (token && existingOrder.access_token && existingOrder.access_token !== token) {
         return res.status(403).json({ success: false, error: 'Unauthorized access to update this order' });
       }
 
-      // Merge metadata with requirements
+      const nowIso = new Date().toISOString();
+      const existingMeta = existingOrder.metadata || {};
+
+      // 1. Customer Message Action
+      if (action === 'customer_message' && customerMessage && customerMessage.trim()) {
+        const newMsg = {
+          id: `msg_${Date.now()}`,
+          sender: 'customer',
+          sender_name: existingOrder.customer_name || 'Client',
+          message: customerMessage.trim(),
+          timestamp: nowIso,
+          read: false
+        };
+
+        const updatedMessages = [...(existingMeta.messages || []), newMsg];
+        const activityItem = {
+          id: `act_${Date.now()}`,
+          timestamp: nowIso,
+          actor: existingOrder.customer_name || 'Client',
+          type: 'customer_message',
+          description: 'Client sent a project message',
+          scope: 'public'
+        };
+
+        const updatedMeta = {
+          ...existingMeta,
+          messages: updatedMessages,
+          activity_log: [activityItem, ...(existingMeta.activity_log || [])]
+        };
+
+        const { data: updated } = await supabase
+          .from('orders')
+          .update({ metadata: updatedMeta, updated_at: nowIso })
+          .eq('id', id)
+          .select()
+          .single();
+
+        return res.status(200).json({
+          success: true,
+          order: sanitizeOrderForCustomer(updated || existingOrder),
+          message: newMsg
+        });
+      }
+
+      // 2. Customer Clarification Response Action
+      if (action === 'clarification_response' && clarificationResponse && clarificationResponse.trim()) {
+        const reqData = existingMeta.requirements_data || {};
+        reqData.status = 'clarification_provided';
+        reqData.clarification_provided_at = nowIso;
+        reqData.client_response = clarificationResponse.trim();
+
+        const newMsg = {
+          id: `msg_${Date.now()}`,
+          sender: 'customer',
+          sender_name: existingOrder.customer_name || 'Client',
+          message: `Requirements Clarification:\n${clarificationResponse.trim()}`,
+          timestamp: nowIso,
+          read: false
+        };
+
+        const updatedMeta = {
+          ...existingMeta,
+          requirements_data: reqData,
+          messages: [...(existingMeta.messages || []), newMsg],
+          activity_log: [
+            {
+              id: `act_${Date.now()}`,
+              timestamp: nowIso,
+              actor: existingOrder.customer_name || 'Client',
+              type: 'requirements_clarification',
+              description: 'Client provided requirements clarification',
+              scope: 'public'
+            },
+            ...(existingMeta.activity_log || [])
+          ]
+        };
+
+        const { data: updated } = await supabase
+          .from('orders')
+          .update({
+            order_status: 'requirements_review',
+            metadata: updatedMeta,
+            updated_at: nowIso
+          })
+          .eq('id', id)
+          .select()
+          .single();
+
+        return res.status(200).json({
+          success: true,
+          order: sanitizeOrderForCustomer(updated || existingOrder)
+        });
+      }
+
+      // 3. General Requirements Save
       const updatedMetadata = {
-        ...(existingOrder.metadata || {}),
-        requirements: requirements || existingOrder.metadata?.requirements || {},
-        clientNotes: clientNotes || existingOrder.metadata?.clientNotes || '',
-        requirementsSavedAt: new Date().toISOString()
+        ...existingMeta,
+        requirements: requirements || existingMeta.requirements || {},
+        clientNotes: clientNotes || existingMeta.clientNotes || '',
+        requirementsSavedAt: nowIso
       };
 
       const updateFields = {
         metadata: updatedMetadata,
-        updated_at: new Date().toISOString()
+        updated_at: nowIso
       };
 
       if (projectName !== undefined) updateFields.project_name = projectName;
@@ -156,7 +270,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        order: updated
+        order: sanitizeOrderForCustomer(updated)
       });
     } catch (err) {
       console.error('[API /api/order PUT] Internal error:', err);

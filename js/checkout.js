@@ -717,6 +717,14 @@ export async function initConfirmationPage() {
     console.error('[Confirmation] Verification error:', err);
     renderNotFoundState(container);
   }
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function renderSuccessState(container, order) {
@@ -726,15 +734,43 @@ function renderSuccessState(container, order) {
     year: 'numeric'
   });
 
+  const meta = order.metadata || {};
+  const milestones = meta.milestones || [];
+  const updates = meta.customer_updates || [];
+  const reqData = meta.requirements_data || {};
+  const deliverables = (meta.files || []).filter(f => f.category === 'deliverable');
+  const messages = meta.messages || [];
+
+  const completedCount = milestones.filter(m => m.status === 'completed').length;
+  const progressPercent = milestones.length > 0 ? Math.round((completedCount / milestones.length) * 100) : 0;
+
+  const statusLabels = {
+    order_received: 'Order Received',
+    awaiting_requirements: 'Awaiting Requirements',
+    requirements_review: 'Requirements Review',
+    ready_to_start: 'Ready to Start',
+    in_progress: 'In Progress',
+    awaiting_feedback: 'Awaiting Feedback',
+    revisions: 'Revisions',
+    final_qc: 'Final Quality Check',
+    ready_for_delivery: 'Ready for Delivery',
+    completed: 'Completed',
+    on_hold: 'On Hold',
+    cancelled: 'Cancelled',
+    confirmed: 'Order Confirmed'
+  };
+
+  const statusLabel = statusLabels[order.order_status] || order.order_status || 'Order Confirmed';
+
   container.innerHTML = `
     <div class="confirmation-card">
       <div class="confirmation-header">
         <span class="confirmation-status-pill success">
-          <span aria-hidden="true">✓</span> ORDER CONFIRMED
+          <span aria-hidden="true">✓</span> ${escapeHtml(statusLabel.toUpperCase())}
         </span>
-        <h1 class="confirmation-heading">You're One Step Closer.</h1>
+        <h1 class="confirmation-heading">Your Project Tracker</h1>
         <p class="confirmation-subtext">
-          Thank you for placing your order. Your purchase has been confirmed, and your project details are ready for the next step.
+          Track real-time progress, review milestones, download deliverables, and communicate directly with Asnat Khan.
         </p>
       </div>
 
@@ -742,11 +778,11 @@ function renderSuccessState(container, order) {
         <div class="details-grid">
           <div class="detail-cell">
             <span class="detail-label">Order Reference</span>
-            <span class="detail-value order-ref">${order.orderRef || order.order_ref}</span>
+            <span class="detail-value order-ref">${escapeHtml(order.orderRef || order.order_ref)}</span>
           </div>
           <div class="detail-cell">
             <span class="detail-label">Package</span>
-            <span class="detail-value">${order.packageName || order.package_name}</span>
+            <span class="detail-value">${escapeHtml(order.packageName || order.package_name)}</span>
           </div>
           <div class="detail-cell">
             <span class="detail-label">Date</span>
@@ -761,45 +797,136 @@ function renderSuccessState(container, order) {
             <div><span class="detail-value status-badge-inline">PAID &bull; VERIFIED</span></div>
           </div>
           <div class="detail-cell">
-            <span class="detail-label">Customer</span>
-            <span class="detail-value">${order.customerName || order.customer_name}</span>
+            <span class="detail-label">Client</span>
+            <span class="detail-value">${escapeHtml(order.customerName || order.customer_name)}</span>
           </div>
         </div>
 
         <div class="detail-cell">
           <span class="detail-label">Confirmation &amp; Updates Sent To</span>
-          <span class="detail-value" style="color: var(--color-gold-highlight); font-size: 0.95rem;">${order.customerEmail || order.customer_email}</span>
+          <span class="detail-value" style="color: var(--color-gold-highlight); font-size: 0.95rem;">${escapeHtml(order.customerEmail || order.customer_email)}</span>
         </div>
       </div>
 
-      <div class="next-steps-section">
-        <h3 class="next-steps-title">What Happens Next</h3>
-        <div class="next-steps-list">
-          <div class="next-step-item">
-            <div class="next-step-num">01</div>
-            <div class="next-step-content">
-              <h5>Project Brief &amp; Scope Review</h5>
-              <p>Asnat Khan will review your project description, design preferences, and selected package requirements.</p>
-            </div>
+      <!-- Action Required Alert: Clarification Request -->
+      ${reqData.status === 'clarification_requested' && reqData.clarification_request ? `
+        <div class="tracker-alert-box" id="tracker-clarification-banner">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span aria-hidden="true" style="font-size: 1.2rem;">⚠️</span>
+            <strong style="color: var(--color-gold-highlight); font-size: 1rem;">Action Requested by Asnat Khan</strong>
           </div>
-          <div class="next-step-item">
-            <div class="next-step-num">02</div>
-            <div class="next-step-content">
-              <h5>Kickoff Coordination</h5>
-              <p>You will receive an onboarding confirmation email to align on your timeline and collect any specific assets.</p>
+          <p style="color: var(--color-silver); margin: 0 0 1rem; line-height: 1.5; font-size: 0.9rem;">
+            ${escapeHtml(reqData.clarification_request)}
+          </p>
+
+          <form id="form-submit-clarification" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <textarea id="clarification-response-text" class="auth-input" style="min-height: 80px;" placeholder="Provide the requested details or links..." required></textarea>
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                Submit Clarification
+              </button>
             </div>
+          </form>
+        </div>
+      ` : ''}
+
+      <!-- Live Project Milestones Stepper -->
+      <div class="tracker-progress-box">
+        <div class="tracker-status-bar">
+          <div>
+            <h3 style="margin: 0; font-size: 1.1rem; color: var(--color-silver);">Production Stage: ${escapeHtml(statusLabel)}</h3>
+            <span style="font-size: 0.8rem; color: var(--color-sage);">Progress: ${progressPercent}% completed</span>
           </div>
-          <div class="next-step-item">
-            <div class="next-step-num">03</div>
-            <div class="next-step-content">
-              <h5>Domain &amp; Hosting Connection</h5>
-              <p>We'll assist with connecting the domain name you provide to the free hosting included with your package.</p>
+          <button id="btn-refresh-customer-tracker" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+            &#x21bb; Refresh Progress
+          </button>
+        </div>
+
+        <div style="width: 100%; height: 6px; background: rgba(9, 17, 14, 0.8); border-radius: 3px; overflow: hidden; margin-bottom: 1.25rem;">
+          <div style="width: ${progressPercent}%; height: 100%; background: var(--color-emerald); transition: width 0.3s ease;"></div>
+        </div>
+
+        <div class="tracker-stepper">
+          ${milestones.map((m, idx) => `
+            <div class="tracker-step-item ${m.status}">
+              <div style="font-size: 0.7rem; font-family: monospace; color: var(--color-gold-highlight);">0${idx + 1}</div>
+              <div class="tracker-step-title">${escapeHtml(m.name)}</div>
+              <div class="tracker-step-status">
+                ${m.status === 'completed' ? '&#10003; Completed' : (m.status === 'in_progress' ? 'In Progress' : 'Pending')}
+              </div>
             </div>
-          </div>
+          `).join('')}
         </div>
       </div>
 
-      <div class="confirmation-actions-bar">
+      <!-- Published Project Updates Feed -->
+      ${updates.length > 0 ? `
+        <div class="tracker-progress-box" style="margin-top: 1.5rem;">
+          <h4 style="margin: 0 0 1rem; font-size: 1rem; color: var(--color-silver); display: flex; align-items: center; gap: 0.5rem;">
+            <span>📢 Recent Project Updates</span>
+          </h4>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            ${updates.map(upd => `
+              <div style="padding: 0.85rem 1rem; background: rgba(9, 17, 14, 0.5); border-left: 3px solid var(--color-emerald); border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--color-sage); margin-bottom: 0.25rem;">
+                  <strong style="color: var(--color-silver);">${escapeHtml(upd.status_label || upd.status)}</strong>
+                  <span>${new Date(upd.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+                <div style="font-size: 0.88rem; color: var(--color-silver); line-height: 1.5;">${escapeHtml(upd.message)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Website Deliverables -->
+      ${deliverables.length > 0 ? `
+        <div class="tracker-progress-box" style="margin-top: 1.5rem; border-color: var(--color-emerald);">
+          <h4 style="margin: 0 0 1rem; font-size: 1rem; color: #34d399; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🏆 Final Project Deliverables</span>
+          </h4>
+          <div class="tracker-deliverables-list">
+            ${deliverables.map(f => `
+              <div class="tracker-file-row">
+                <div>
+                  <div style="font-weight: 600; color: var(--color-silver); font-size: 0.9rem;">${escapeHtml(f.name)}</div>
+                  ${f.description ? `<div style="font-size: 0.78rem; color: var(--color-sage);">${escapeHtml(f.description)}</div>` : ''}
+                </div>
+                <a href="${escapeHtml(f.url)}" target="_blank" class="btn btn-primary" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;">
+                  Download Deliverable &rarr;
+                </a>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Direct Project Communication -->
+      <div class="tracker-progress-box" style="margin-top: 1.5rem;">
+        <h4 style="margin: 0 0 0.5rem; font-size: 1rem; color: var(--color-silver);">Direct Project Communication</h4>
+        <p style="margin: 0 0 1rem; font-size: 0.82rem; color: var(--color-sage);">Send messages or inquiries directly to Asnat Khan regarding this project.</p>
+
+        <div class="tracker-messages-feed" id="customer-chat-feed">
+          ${messages.length === 0 ? `
+            <div style="text-align: center; color: var(--color-sage); padding: 1rem; font-size: 0.85rem;">No messages exchanged yet. Send a message below.</div>
+          ` : messages.map(m => `
+            <div style="padding: 0.65rem 0.9rem; border-radius: 8px; font-size: 0.85rem; max-width: 85%; ${m.sender === 'customer' ? 'align-self: flex-end; background: rgba(10, 96, 70, 0.3); border: 1px solid var(--color-emerald); color: var(--color-silver);' : 'align-self: flex-start; background: rgba(9, 17, 14, 0.7); border: 1px solid var(--border-subtle); color: var(--color-silver);'}">
+              <div>${escapeHtml(m.message)}</div>
+              <div style="font-size: 0.7rem; color: var(--color-sage); margin-top: 0.25rem; display: flex; justify-content: space-between; gap: 1rem;">
+                <span>${m.sender === 'customer' ? 'You' : 'Asnat Khan'}</span>
+                <span>${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <form id="form-customer-send-msg" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <input type="text" id="customer-chat-input" class="auth-input" placeholder="Type your message to Asnat Khan..." required />
+          <button type="submit" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">Send</button>
+        </form>
+      </div>
+
+      <div class="confirmation-actions-bar" style="margin-top: 2rem;">
         <a href="index.html" class="btn btn-secondary">
           <span>BACK TO HOME</span>
         </a>
@@ -810,6 +937,82 @@ function renderSuccessState(container, order) {
       </div>
     </div>
   `;
+
+  // Bind Refresh Button
+  document.getElementById('btn-refresh-customer-tracker')?.addEventListener('click', async () => {
+    const btn = document.getElementById('btn-refresh-customer-tracker');
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    try {
+      const res = await fetch(`/api/order?id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(order.access_token || '')}`);
+      const data = await res.json();
+      if (data.success && data.order) {
+        renderPaidState(container, data.order, sessionId);
+      } else {
+        btn.disabled = false;
+        btn.textContent = '↻ Refresh Progress';
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = '↻ Refresh Progress';
+    }
+  });
+
+  // Bind Clarification Submit
+  document.getElementById('form-submit-clarification')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('clarification-response-text');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.disabled = true;
+    try {
+      const res = await fetch('/api/order', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: order.id,
+          token: order.access_token,
+          action: 'clarification_response',
+          clarificationResponse: text
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.order) {
+        renderPaidState(container, data.order, sessionId);
+      }
+    } catch {
+      input.disabled = false;
+    }
+  });
+
+  // Bind Customer Message Send
+  document.getElementById('form-customer-send-msg')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('customer-chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    input.disabled = true;
+    try {
+      const res = await fetch('/api/order', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: order.id,
+          token: order.access_token,
+          action: 'customer_message',
+          customerMessage: msg
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.order) {
+        renderPaidState(container, data.order, sessionId);
+      }
+    } catch {
+      input.disabled = false;
+    }
+  });
 }
 
 function renderProcessingState(container, order) {

@@ -7062,5 +7062,107 @@ ul, ol {
   }
 }
 
+/* ==========================================================================
+   CUSTOMER ORDER TRACKER & DASHBOARD EXTENSIONS
+   ========================================================================== */
+.tracker-progress-box {
+  background: rgba(6, 44, 33, 0.4);
+  border: 1px solid var(--border-emerald);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  text-align: left;
+}
 
+.tracker-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
 
+.tracker-stepper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.tracker-step-item {
+  background: rgba(9, 17, 14, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: border-color var(--transition-fast);
+}
+
+.tracker-step-item.completed {
+  border-color: var(--color-emerald);
+  background: rgba(10, 96, 70, 0.15);
+}
+
+.tracker-step-item.in_progress {
+  border-color: var(--color-gold);
+  background: rgba(176, 141, 50, 0.1);
+}
+
+.tracker-step-title {
+  font-weight: 600;
+  color: var(--color-silver);
+}
+
+.tracker-step-status {
+  font-size: 0.72rem;
+  color: var(--color-sage);
+}
+
+.tracker-step-item.completed .tracker-step-status {
+  color: #34d399;
+}
+
+.tracker-step-item.in_progress .tracker-step-status {
+  color: var(--color-gold-highlight);
+}
+
+.tracker-alert-box {
+  background: rgba(176, 141, 50, 0.12);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.tracker-deliverables-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.tracker-file-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background: rgba(9, 17, 14, 0.6);
+  border: 1px solid var(--border-emerald);
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.tracker-messages-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 320px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  padding-right: 0.5rem;
+}
