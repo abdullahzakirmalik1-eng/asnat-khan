@@ -7175,8 +7175,11 @@ ul, ol {
 .header-cart-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.55rem 0.95rem;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.65rem;
+  min-width: 40px;
+  min-height: 40px;
   background: rgba(6, 44, 33, 0.4);
   border: 1px solid rgba(134, 155, 146, 0.25);
   border-radius: var(--radius-sm, 6px);
@@ -7215,7 +7218,7 @@ ul, ol {
 }
 
 .cart-label {
-  display: inline-block;
+  display: none !important;
 }
 
 /* Cart Badge */

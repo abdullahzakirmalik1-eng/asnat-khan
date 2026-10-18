@@ -115,6 +115,8 @@ htmlPagesToCheck.forEach(pageName => {
   const content = fs.readFileSync(filePath, 'utf8');
   assert(content.includes('header-cart-btn') || content.includes('id="header-cart-btn"'), `${pageName} has header cart button`);
   assert(content.includes('header-cart-badge') || content.includes('cart-badge'), `${pageName} has cart badge element`);
+  assert(!content.includes('class="cart-label">Cart<'), `${pageName} does not have Cart text inside header-cart-btn`);
+  assert(!content.includes('class="nav-link">Cart<'), `${pageName} does not have separate Cart page link in nav menu`);
   assert(content.includes('js/cart.js'), `${pageName} imports js/cart.js`);
 });
 
