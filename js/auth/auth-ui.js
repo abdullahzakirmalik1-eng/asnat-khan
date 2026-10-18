@@ -15,6 +15,7 @@ import {
   confirmPasswordReset,
   sendEmailVerification,
   checkEmailVerification,
+  getFriendlyAuthErrorMessage,
   AuthIntegrationPendingError
 } from './auth-interface.js';
 
@@ -185,18 +186,19 @@ export function initLoginPage() {
     setButtonLoading(submitBtn, true, 'SIGN IN →', 'CONNECTING...');
 
     try {
-      // Connects to Firebase in next implementation step
       await signInWithEmail(emailInput.value, passwordInput.value);
+      showStatusAlert(statusAlert, 'Sign in successful! Redirecting to studio...', 'success');
+      setButtonLoading(submitBtn, true, 'SIGN IN →', 'REDIRECTING...');
+      const returnUrl = getReturnUrlFromLocation('/checkout');
+      setTimeout(() => {
+        window.location.href = returnUrl;
+      }, 700);
     } catch (err) {
       setButtonLoading(submitBtn, false, 'SIGN IN →');
       if (err instanceof AuthIntegrationPendingError) {
-        showStatusAlert(
-          statusAlert,
-          'Firebase Authentication Boundary Prepared: Live identity verification will be connected in the next step. Valid form inputs confirmed.',
-          'info'
-        );
+        showStatusAlert(statusAlert, err.message, 'info');
       } else {
-        showStatusAlert(statusAlert, err.message || 'Something went wrong. Please try again.', 'error');
+        showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
       }
     }
   });
@@ -263,20 +265,22 @@ export function initRegisterPage() {
 
     if (hasErrors) return;
 
-    setButtonLoading(submitBtn, true, 'CREATE ACCOUNT →', 'PREPARING...');
+    setButtonLoading(submitBtn, true, 'CREATE ACCOUNT →', 'CREATING...');
 
     try {
       await createAccount(nameInput.value, emailInput.value, passwordInput.value);
+      showStatusAlert(statusAlert, 'Account created successfully! Preparing your studio workspace...', 'success');
+      setButtonLoading(submitBtn, true, 'CREATE ACCOUNT →', 'REDIRECTING...');
+      const returnUrl = getReturnUrlFromLocation('/checkout');
+      setTimeout(() => {
+        window.location.href = returnUrl;
+      }, 900);
     } catch (err) {
       setButtonLoading(submitBtn, false, 'CREATE ACCOUNT →');
       if (err instanceof AuthIntegrationPendingError) {
-        showStatusAlert(
-          statusAlert,
-          'Firebase Authentication Boundary Prepared: Account creation pipeline ready. Firebase Identity will be connected in Phase 2.',
-          'info'
-        );
+        showStatusAlert(statusAlert, err.message, 'info');
       } else {
-        showStatusAlert(statusAlert, err.message || 'Something went wrong. Please try again.', 'error');
+        showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
       }
     }
   });
@@ -310,16 +314,18 @@ export function initForgotPasswordPage() {
 
     try {
       await requestPasswordReset(emailInput.value);
+      setButtonLoading(submitBtn, false, 'SEND RESET LINK →');
+      showStatusAlert(
+        statusAlert,
+        'Password recovery link sent! Please check your email inbox (and spam folder) for instructions.',
+        'success'
+      );
     } catch (err) {
       setButtonLoading(submitBtn, false, 'SEND RESET LINK →');
       if (err instanceof AuthIntegrationPendingError) {
-        showStatusAlert(
-          statusAlert,
-          'Firebase Authentication Boundary Prepared: Password recovery dispatch ready. Firebase will handle email delivery in Phase 2.',
-          'info'
-        );
+        showStatusAlert(statusAlert, err.message, 'info');
       } else {
-        showStatusAlert(statusAlert, err.message || 'Something went wrong. Please try again.', 'error');
+        showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
       }
     }
   });
@@ -380,17 +386,18 @@ export function initResetPasswordPage() {
     setButtonLoading(submitBtn, true, 'UPDATE PASSWORD →', 'UPDATING...');
 
     try {
-      await confirmPasswordReset(actionCode || 'pending-phase-2-code', passwordInput.value);
+      await confirmPasswordReset(actionCode || 'code-pending', passwordInput.value);
+      setButtonLoading(submitBtn, true, 'UPDATE PASSWORD →', 'REDIRECTING...');
+      showStatusAlert(statusAlert, 'Password updated successfully! Redirecting to sign in...', 'success');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1200);
     } catch (err) {
       setButtonLoading(submitBtn, false, 'UPDATE PASSWORD →');
       if (err instanceof AuthIntegrationPendingError) {
-        showStatusAlert(
-          statusAlert,
-          'Firebase Authentication Boundary Prepared: Secure reset handler ready. Code verification will be performed by Firebase in Phase 2.',
-          'info'
-        );
+        showStatusAlert(statusAlert, err.message, 'info');
       } else {
-        showStatusAlert(statusAlert, err.message || 'Failed to update password. Please try again.', 'error');
+        showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
       }
     }
   });
@@ -409,16 +416,14 @@ export function initVerifyEmailPage() {
     setButtonLoading(resendBtn, true, 'RESEND VERIFICATION EMAIL', 'SENDING...');
     try {
       await sendEmailVerification();
+      setButtonLoading(resendBtn, false, 'RESEND VERIFICATION EMAIL');
+      showStatusAlert(statusAlert, 'Verification email sent! Check your inbox.', 'success');
     } catch (err) {
       setButtonLoading(resendBtn, false, 'RESEND VERIFICATION EMAIL');
       if (err instanceof AuthIntegrationPendingError) {
-        showStatusAlert(
-          statusAlert,
-          'Firebase Authentication Boundary Prepared: Verification email triggers will be managed by Firebase in Phase 2.',
-          'info'
-        );
+        showStatusAlert(statusAlert, err.message, 'info');
       } else {
-        showStatusAlert(statusAlert, err.message, 'error');
+        showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
       }
     }
   });
@@ -429,16 +434,21 @@ export function initVerifyEmailPage() {
     try {
       const isVerified = await checkEmailVerification();
       setButtonLoading(checkBtn, false, "I'VE VERIFIED MY EMAIL →");
-      if (!isVerified) {
+      if (isVerified) {
+        showStatusAlert(statusAlert, 'Email successfully verified! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = getReturnUrlFromLocation('/checkout');
+        }, 800);
+      } else {
         showStatusAlert(
           statusAlert,
-          'Verification status check prepared: Firebase session listener will confirm your verified status once integrated.',
-          'info'
+          'Your email is not verified yet. Please click the confirmation link sent to your inbox and retry.',
+          'warning'
         );
       }
     } catch (err) {
       setButtonLoading(checkBtn, false, "I'VE VERIFIED MY EMAIL →");
-      showStatusAlert(statusAlert, err.message, 'error');
+      showStatusAlert(statusAlert, getFriendlyAuthErrorMessage(err), 'error');
     }
   });
 }
