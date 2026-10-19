@@ -700,6 +700,14 @@ while ($listener.IsListening) {
             $path = "/reset-password.html"
         } elseif ($path -eq "/verify-email" -or $path -eq "/verify-email/") {
             $path = "/verify-email.html"
+        } elseif ($path -eq "/privacy-policy" -or $path -eq "/privacy-policy/") {
+            $path = "/privacy-policy.html"
+        } elseif ($path -eq "/terms-and-conditions" -or $path -eq "/terms-and-conditions/") {
+            $path = "/terms-and-conditions.html"
+        } elseif ($path -eq "/cancellation-return-refund-policy" -or $path -eq "/cancellation-return-refund-policy/") {
+            $path = "/cancellation-return-refund-policy.html"
+        } elseif ($path -eq "/ownership-statement" -or $path -eq "/ownership-statement/") {
+            $path = "/ownership-statement.html"
         } elseif ($path -eq "/admin" -or $path -eq "/admin/" -or $path.StartsWith("/admin/")) {
             $path = "/admin.html"
         }

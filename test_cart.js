@@ -106,7 +106,11 @@ const htmlPagesToCheck = [
   'register.html',
   'forgot-password.html',
   'reset-password.html',
-  'verify-email.html'
+  'verify-email.html',
+  'privacy-policy.html',
+  'terms-and-conditions.html',
+  'cancellation-return-refund-policy.html',
+  'ownership-statement.html'
 ];
 
 htmlPagesToCheck.forEach(pageName => {
@@ -151,12 +155,79 @@ const vercelJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'vercel.json'
 const cartRewrite = vercelJson.rewrites.find(r => r.source === '/cart');
 assert(cartRewrite && cartRewrite.destination === '/cart.html', 'vercel.json has rewrite for /cart -> /cart.html');
 
+const privacyRewrite = vercelJson.rewrites.find(r => r.source === '/privacy-policy');
+assert(privacyRewrite && privacyRewrite.destination === '/privacy-policy.html', 'vercel.json has rewrite for /privacy-policy -> /privacy-policy.html');
+
+const termsRewrite = vercelJson.rewrites.find(r => r.source === '/terms-and-conditions');
+assert(termsRewrite && termsRewrite.destination === '/terms-and-conditions.html', 'vercel.json has rewrite for /terms-and-conditions -> /terms-and-conditions.html');
+
+const refundRewrite = vercelJson.rewrites.find(r => r.source === '/cancellation-return-refund-policy');
+assert(refundRewrite && refundRewrite.destination === '/cancellation-return-refund-policy.html', 'vercel.json has rewrite for /cancellation-return-refund-policy -> /cancellation-return-refund-policy.html');
+
+const ownershipRewrite = vercelJson.rewrites.find(r => r.source === '/ownership-statement');
+assert(ownershipRewrite && ownershipRewrite.destination === '/ownership-statement.html', 'vercel.json has rewrite for /ownership-statement -> /ownership-statement.html');
+
 const servePs1 = fs.readFileSync(path.join(__dirname, 'serve.ps1'), 'utf8');
 assert(servePs1.includes('$path -eq "/cart"'), 'serve.ps1 maps /cart to /cart.html');
+assert(servePs1.includes('$path -eq "/privacy-policy"'), 'serve.ps1 maps /privacy-policy to /privacy-policy.html');
+assert(servePs1.includes('$path -eq "/terms-and-conditions"'), 'serve.ps1 maps /terms-and-conditions to /terms-and-conditions.html');
+assert(servePs1.includes('$path -eq "/cancellation-return-refund-policy"'), 'serve.ps1 maps /cancellation-return-refund-policy to /cancellation-return-refund-policy.html');
+assert(servePs1.includes('$path -eq "/ownership-statement"'), 'serve.ps1 maps /ownership-statement to /ownership-statement.html');
 assert(servePs1.includes('$hasCart = ($body.cartItems'), 'serve.ps1 supports authoritative cartItems calculation in POST /api/order');
 
 console.log('\n======================================================');
-console.log('--- 7. TEST BRAND COLOR COMPLIANCE (ZERO FORBIDDEN GOLD) ---');
+console.log('--- 7. TEST LEGAL POLICY PAGES CONTENT & INVARIANTS ---');
+console.log('======================================================');
+
+// 7.1 Privacy Policy Verification
+const privacyHtml = fs.readFileSync(path.join(__dirname, 'privacy-policy.html'), 'utf8');
+assert(privacyHtml.includes('Privacy Policy'), 'privacy-policy.html contains title');
+assert(privacyHtml.includes('Google Firebase Authentication'), 'privacy-policy.html documents Firebase Auth accurately');
+assert(privacyHtml.includes('PCI-DSS compliant'), 'privacy-policy.html documents payment gateway role');
+assert(privacyHtml.includes('asnat_cart_v1'), 'privacy-policy.html documents actual localStorage usage accurately');
+assert(privacyHtml.includes('contact@asnatkhan.com'), 'privacy-policy.html provides direct studio contact');
+
+// 7.2 Terms & Conditions Verification
+const termsHtml = fs.readFileSync(path.join(__dirname, 'terms-and-conditions.html'), 'utf8');
+assert(termsHtml.includes('Terms &amp; Conditions') || termsHtml.includes('Terms and Conditions'), 'terms-and-conditions.html contains title');
+assert(termsHtml.includes('Basic Website') && termsHtml.includes('$50'), 'terms-and-conditions.html includes Basic Website at $50');
+assert(termsHtml.includes('Standard Website') && termsHtml.includes('$100'), 'terms-and-conditions.html includes Standard Website at $100');
+assert(termsHtml.includes('E-Commerce Website') && termsHtml.includes('$200'), 'terms-and-conditions.html includes E-Commerce Website at $200');
+assert(termsHtml.includes('Additional Products') || termsHtml.includes('$1.00'), 'terms-and-conditions.html includes $1 extra products');
+assert(termsHtml.includes('Pitch Deck Design') && termsHtml.includes('$50'), 'terms-and-conditions.html includes Pitch Deck at $50');
+assert(termsHtml.includes('Article Writing') && termsHtml.includes('$10'), 'terms-and-conditions.html includes Writing at $10/1k words');
+assert(termsHtml.includes('You provide and purchase your own domain name'), 'terms-and-conditions.html includes exact domain policy');
+
+// 7.3 Cancellation & Refund Policy Verification
+const refundHtml = fs.readFileSync(path.join(__dirname, 'cancellation-return-refund-policy.html'), 'utf8');
+assert(refundHtml.includes('Cancellation, Return &amp; Refund Policy') || refundHtml.includes('Cancellation, Return and Refund Policy'), 'refund policy contains title');
+assert(refundHtml.includes('Cancellation Before Work Begins'), 'refund policy covers cancellation before work begins');
+assert(refundHtml.includes('Cancellation After Project Work Has Started'), 'refund policy covers cancellation after work started');
+assert(refundHtml.includes('Partially Completed Projects'), 'refund policy covers partially completed projects');
+assert(refundHtml.includes('Duplicate Payments &amp; Billing Discrepancies'), 'refund policy covers duplicate payments');
+assert(refundHtml.includes('Statutory Consumer Rights'), 'refund policy preserves statutory consumer rights');
+
+// 7.4 Ownership Statement Verification
+const ownershipHtml = fs.readFileSync(path.join(__dirname, 'ownership-statement.html'), 'utf8');
+assert(ownershipHtml.includes('Ownership Statement'), 'ownership-statement.html contains title');
+assert(ownershipHtml.includes('Ownership &amp; Transfer of Final Deliverables'), 'ownership-statement.html covers deliverables transfer');
+assert(ownershipHtml.includes('Domain Ownership &amp; Registrar Control'), 'ownership-statement.html covers client domain ownership');
+assert(ownershipHtml.includes('Customer-Provided Content, Logos &amp; Trademarks'), 'ownership-statement.html covers client trademarks');
+assert(ownershipHtml.includes('Open-Source Software &amp; Frameworks'), 'ownership-statement.html distinguishes open-source licensing');
+assert(ownershipHtml.includes('Portfolio Display &amp; Client Showcase'), 'ownership-statement.html explains portfolio display and NDA options');
+
+// 7.5 Footer Integration Verification
+const pagesWithSiteFooter = ['index.html', 'services.html', 'founder-story.html', 'get-quote.html'];
+pagesWithSiteFooter.forEach(pg => {
+  const html = fs.readFileSync(path.join(__dirname, pg), 'utf8');
+  assert(html.includes('privacy-policy.html'), `${pg} footer links to privacy-policy.html`);
+  assert(html.includes('terms-and-conditions.html'), `${pg} footer links to terms-and-conditions.html`);
+  assert(html.includes('cancellation-return-refund-policy.html'), `${pg} footer links to cancellation-return-refund-policy.html`);
+  assert(html.includes('ownership-statement.html'), `${pg} footer links to ownership-statement.html`);
+});
+
+console.log('\n======================================================');
+console.log('--- 8. TEST BRAND COLOR COMPLIANCE (ZERO FORBIDDEN GOLD) ---');
 console.log('======================================================');
 
 let forbiddenColorOccurrences = 0;
