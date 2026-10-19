@@ -3572,6 +3572,10 @@ ul, ol {
   position: relative;
 }
 
+.page-services .section-packages {
+  padding-top: clamp(7.5rem, 13vw, 10.5rem);
+}
+
 .packages-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
