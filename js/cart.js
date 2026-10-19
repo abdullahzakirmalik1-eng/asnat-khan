@@ -356,7 +356,7 @@ export function updateHeaderCartBadges() {
   if (typeof document === 'undefined') return;
 
   const count = getCartCount();
-  const badges = document.querySelectorAll('.cart-badge, #header-cart-badge, #drawer-cart-badge');
+  const badges = document.querySelectorAll('.cart-badge, #header-cart-badge, #drawer-cart-badge, .drawer-cart-badge');
   const cartBtns = document.querySelectorAll('.header-cart-btn, #header-cart-btn, .drawer-cart-link');
 
   badges.forEach(badge => {
@@ -395,6 +395,29 @@ export function initCart() {
         }
       }));
     }
+  });
+
+  // Attach navigation handler for header cart buttons
+  const headerCartBtns = document.querySelectorAll('.header-cart-btn, #header-cart-btn, .drawer-cart-link');
+  headerCartBtns.forEach(btn => {
+    if (btn.hasAttribute('data-cart-click-bound')) return;
+    btn.setAttribute('data-cart-click-bound', 'true');
+
+    btn.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const path = window.location.pathname;
+      if (path.endsWith('/cart') || path.endsWith('/cart.html') || path === 'cart.html') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.dispatchEvent(new CustomEvent('asnat:cart-updated', {
+          detail: {
+            items: getCartItems(),
+            count: getCartCount(),
+            pricing: getCartPricing()
+          }
+        }));
+      }
+    });
   });
 
   // Attach click handlers to any [data-add-cart] or [data-add-to-cart] buttons on the page
@@ -440,9 +463,13 @@ if (typeof window !== 'undefined') {
     initCart
   };
 
+  try { updateHeaderCartBadges(); } catch (e) {}
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCart);
   } else {
     initCart();
   }
+
+  window.addEventListener('load', updateHeaderCartBadges);
 }

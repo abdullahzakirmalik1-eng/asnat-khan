@@ -472,21 +472,40 @@ export function initCheckoutPage() {
     cartItems: (cartItems && cartItems.length > 0) ? cartItems : null
   });
 
+  const isCartEmpty = !calculation.lineItems || calculation.lineItems.length === 0 || calculation.totalAmount <= 0;
+
   if (summaryItemsContainer) {
-    summaryItemsContainer.innerHTML = calculation.lineItems.map(item => `
-      <div class="summary-item-row">
-        <div class="summary-item-name">
-          <span>${item.name}</span>
-          ${item.description ? `<span class="summary-item-sub">${item.description}</span>` : ''}
+    if (isCartEmpty) {
+      summaryItemsContainer.innerHTML = `
+        <div class="summary-empty-notice" style="padding: 1.5rem 0; text-align: center; color: var(--color-sage);">
+          <p style="margin-bottom: 1rem; font-size: 0.9rem;">Your cart is currently empty. Please select a service before checking out.</p>
+          <a href="services.html" class="btn btn-primary" style="display: inline-flex; padding: 0.6rem 1.25rem; font-size: 0.8rem;">
+            <span>EXPLORE SERVICES</span>
+            <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+          </a>
         </div>
-        <div class="summary-item-price">$${Number(item.amount).toFixed(2)}</div>
-      </div>
-    `).join('');
+      `;
+    } else {
+      summaryItemsContainer.innerHTML = calculation.lineItems.map(item => `
+        <div class="summary-item-row">
+          <div class="summary-item-name">
+            <span>${item.name}</span>
+            ${item.description ? `<span class="summary-item-sub">${item.description}</span>` : ''}
+          </div>
+          <div class="summary-item-price">$${Number(item.amount).toFixed(2)}</div>
+        </div>
+      `).join('');
+    }
   }
 
   if (summarySubtotal) summarySubtotal.textContent = `$${calculation.subtotal.toFixed(2)}`;
   if (summaryTotal) summaryTotal.textContent = `$${calculation.totalAmount.toFixed(2)}`;
   if (payBtnAmount) payBtnAmount.textContent = `$${calculation.totalAmount.toFixed(2)}`;
+
+  if (isCartEmpty && payBtn) {
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span>CART IS EMPTY</span>';
+  }
 
   // Form Submission / Payment Initiation
   checkoutForm.addEventListener('submit', async (e) => {
@@ -539,6 +558,15 @@ export function initCheckoutPage() {
     }
 
     if (!isValid) return;
+
+    if (isCartEmpty || calculation.totalAmount <= 0) {
+      if (errorBanner && errorMessage) {
+        errorBanner.style.display = 'block';
+        errorMessage.textContent = 'Your cart is empty. Please select a service package before submitting payment.';
+        errorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     // Save updated customer details in state
     state.customer = {
@@ -728,6 +756,8 @@ export async function initConfirmationPage() {
     console.error('[Confirmation] Verification error:', err);
     renderNotFoundState(container);
   }
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
