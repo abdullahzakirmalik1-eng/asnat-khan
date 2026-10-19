@@ -165,12 +165,15 @@ export function addItem({
     unitPrice = ADDITIONAL_SERVICES[normalizedId].price;
   }
 
+  let notificationMessage = `Added <strong>${itemDisplayName}</strong> to your studio cart.`;
+
   // Handle Website Package Replacement/Upgrade Rule
   if (isWebsitePackage) {
     const existingIndex = items.findIndex(i => ['basic', 'standard', 'ecommerce'].includes((i.id || '').toLowerCase()));
     if (existingIndex >= 0) {
       // Replace existing website package with newly chosen package
       const prev = items[existingIndex];
+      const isSwitch = (prev.id || '').toLowerCase() !== normalizedId;
       items[existingIndex] = {
         id: normalizedId,
         name: itemDisplayName,
@@ -179,6 +182,11 @@ export function addItem({
         options: { ...prev.options, ...options },
         updatedAt: Date.now()
       };
+      if (isSwitch) {
+        notificationMessage = `Switched package to <strong>${itemDisplayName}</strong> in your cart.`;
+      } else {
+        notificationMessage = `<strong>${itemDisplayName}</strong> is in your cart.`;
+      }
     } else {
       items.push({
         id: normalizedId,
@@ -207,14 +215,17 @@ export function addItem({
           },
           updatedAt: Date.now()
         };
+        notificationMessage = `Added +1,000 words to <strong>Article Writing</strong> (${(newUnits * 1000).toLocaleString()} words total).`;
       } else {
         const addQty = Math.max(1, parseInt(quantity, 10) || 1);
+        const newQty = (existing.quantity || 1) + addQty;
         items[existingIndex] = {
           ...existing,
-          quantity: (existing.quantity || 1) + addQty,
+          quantity: newQty,
           options: { ...existing.options, ...options },
           updatedAt: Date.now()
         };
+        notificationMessage = `Updated <strong>${itemDisplayName}</strong> quantity in your cart (${newQty}).`;
       }
     } else {
       items.push({
@@ -225,13 +236,17 @@ export function addItem({
         options: { ...options },
         addedAt: Date.now()
       });
+      if (normalizedId === 'writing') {
+        const words = (options.units ? options.units : 1) * 1000;
+        notificationMessage = `Added <strong>Article Writing</strong> (${words.toLocaleString()} words) to your studio cart.`;
+      }
     }
   }
 
   saveCartItems(items);
 
   if (!silent) {
-    showCartNotification(`Added <strong>${itemDisplayName}</strong> to your studio cart.`);
+    showCartNotification(notificationMessage);
   }
 
   return items.find(i => (i.id || '').toLowerCase() === normalizedId);
@@ -373,20 +388,110 @@ export function updateHeaderCartBadges() {
 }
 
 /**
+ * Triggers a tactile pulse animation on header cart badges when an item is added.
+ */
+export function bumpHeaderCartBadges() {
+  if (typeof document === 'undefined') return;
+  const badges = document.querySelectorAll('.cart-badge, #header-cart-badge, .drawer-cart-badge, #drawer-cart-badge');
+  badges.forEach(badge => {
+    badge.classList.remove('bump');
+    void badge.offsetWidth; // Force reflow
+    badge.classList.add('bump');
+    setTimeout(() => {
+      badge.classList.remove('bump');
+    }, 500);
+  });
+}
+
+/**
+ * Synchronizes all Add to Cart buttons on the services page with current cart items.
+ */
+export function syncServiceButtons() {
+  if (typeof document === 'undefined') return;
+
+  const buttons = document.querySelectorAll('[data-add-cart], [data-add-to-cart]');
+  if (!buttons || buttons.length === 0) return;
+
+  const items = getCartItems();
+  const currentWebsiteItem = items.find(i => ['basic', 'standard', 'ecommerce'].includes((i.id || '').toLowerCase()));
+  const currentWebsiteId = currentWebsiteItem ? currentWebsiteItem.id.toLowerCase() : null;
+
+  buttons.forEach(btn => {
+    const pkgId = (btn.getAttribute('data-add-to-cart') || btn.getAttribute('data-add-cart') || '').toLowerCase().trim();
+    if (!pkgId) return;
+
+    // Respect ongoing celebration flash animation
+    const flashUntil = parseInt(btn.getAttribute('data-flash-until') || '0', 10);
+    if (flashUntil > Date.now()) {
+      return;
+    }
+
+    const isWebsitePkg = ['basic', 'standard', 'ecommerce'].includes(pkgId);
+    const existingItem = items.find(i => (i.id || '').toLowerCase() === pkgId);
+
+    if (existingItem) {
+      btn.classList.add('is-in-cart');
+      btn.classList.remove('is-added', 'is-switch');
+
+      if (pkgId === 'writing') {
+        const words = existingItem.options?.words || (existingItem.options?.units ? existingItem.options.units * 1000 : 1000);
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>IN CART (${words.toLocaleString()} WORDS) &bull; +1,000 MORE</span>
+        `;
+        btn.setAttribute('aria-label', `Article writing in cart with ${words} words. Click to add 1,000 more words or view cart.`);
+      } else {
+        const name = PACKAGES[pkgId]?.name || ADDITIONAL_SERVICES[pkgId]?.name || pkgId.toUpperCase();
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>IN CART &bull; VIEW CART &rarr;</span>
+        `;
+        btn.setAttribute('aria-label', `${name} is in your studio cart. Click to view cart.`);
+      }
+    } else {
+      btn.classList.remove('is-in-cart', 'is-added');
+
+      if (isWebsitePkg && currentWebsiteId) {
+        // Another website package is selected -> Offer seamless switch
+        const pkgName = PACKAGES[pkgId]?.name?.toUpperCase() || pkgId.toUpperCase();
+        btn.classList.add('is-switch');
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>SWITCH TO ${pkgName}</span>
+        `;
+        btn.setAttribute('aria-label', `Switch current website in cart to ${pkgName}`);
+      } else {
+        // Default pristine state
+        btn.classList.remove('is-switch');
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>ADD TO CART</span>
+        `;
+        const name = PACKAGES[pkgId]?.name || ADDITIONAL_SERVICES[pkgId]?.name || pkgId.toUpperCase();
+        btn.setAttribute('aria-label', `Add ${name} to Cart`);
+      }
+    }
+  });
+}
+
+/**
  * Initializes listeners for header cart buttons, storage events, and services page CTAs.
  */
 export function initCart() {
   updateHeaderCartBadges();
+  syncServiceButtons();
 
   // Listen for internal cart update events
   window.addEventListener('asnat:cart-updated', () => {
     updateHeaderCartBadges();
+    syncServiceButtons();
   });
 
   // Listen for multi-tab storage synchronization
   window.addEventListener('storage', (e) => {
     if (e.key === CART_STORAGE_KEY) {
       updateHeaderCartBadges();
+      syncServiceButtons();
       window.dispatchEvent(new CustomEvent('asnat:cart-updated', {
         detail: {
           items: getCartItems(),
@@ -429,10 +534,43 @@ export function initCart() {
 
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const pkgId = btn.getAttribute('data-add-to-cart') || btn.getAttribute('data-add-cart');
+      const pkgId = (btn.getAttribute('data-add-to-cart') || btn.getAttribute('data-add-cart') || '').toLowerCase().trim();
+      if (!pkgId) return;
+
+      const items = getCartItems();
+      const existingItem = items.find(i => (i.id || '').toLowerCase() === pkgId);
+
+      // If already in cart and is a fixed-package service, navigating directly to cart provides seamless flow
+      if (btn.classList.contains('is-in-cart') && pkgId !== 'writing') {
+        window.location.href = 'cart.html';
+        return;
+      }
+
       const units = btn.getAttribute('data-cart-units') ? parseInt(btn.getAttribute('data-cart-units'), 10) : 1;
       const extraProds = btn.getAttribute('data-cart-extra-products') ? parseInt(btn.getAttribute('data-cart-extra-products'), 10) : 0;
 
+      // Temporary celebratory feedback on the button
+      const FLASH_DURATION = 1700;
+      btn.setAttribute('data-flash-until', String(Date.now() + FLASH_DURATION));
+      btn.classList.remove('is-in-cart', 'is-switch');
+      btn.classList.add('is-added');
+
+      if (pkgId === 'writing') {
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>✓ +1,000 WORDS ADDED!</span>
+        `;
+      } else {
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>✓ ADDED TO CART!</span>
+        `;
+      }
+
+      // Bump header badge animation
+      bumpHeaderCartBadges();
+
+      // Add to unified cart
       addItem({
         id: pkgId,
         quantity: 1,
@@ -442,6 +580,12 @@ export function initCart() {
           additionalProducts: extraProds
         }
       });
+
+      // After celebratory flash completes, synchronize all buttons to stable states
+      setTimeout(() => {
+        btn.removeAttribute('data-flash-until');
+        syncServiceButtons();
+      }, FLASH_DURATION);
     });
   });
 }
@@ -460,10 +604,15 @@ if (typeof window !== 'undefined') {
     clearCart,
     showCartNotification,
     updateHeaderCartBadges,
+    bumpHeaderCartBadges,
+    syncServiceButtons,
     initCart
   };
 
-  try { updateHeaderCartBadges(); } catch (e) {}
+  try { 
+    updateHeaderCartBadges();
+    syncServiceButtons();
+  } catch (e) {}
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCart);
@@ -471,5 +620,9 @@ if (typeof window !== 'undefined') {
     initCart();
   }
 
-  window.addEventListener('load', updateHeaderCartBadges);
+  window.addEventListener('load', () => {
+    updateHeaderCartBadges();
+    syncServiceButtons();
+  });
 }
+
