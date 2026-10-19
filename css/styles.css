@@ -8297,3 +8297,149 @@ ul, ol {
   }
 }
 
+/* ==========================================================================
+   TEMPORARILY HIDDEN FUNCTIONALITIES & PAGES
+   Controlled visibility for:
+   - Order (navigation links, drawer links, order buttons, order page)
+   - Customer Dashboard (order-confirmation.html customer tracker & dashboard)
+   - Cart Pages and Icons (header cart button, drawer cart link, add-to-cart buttons, cart page, checkout page)
+   - Footer Legal Category (privacy policy, terms, cancellation, ownership)
+   - Sign In Page (navigation links, drawer links, login page)
+   To unhide, remove or disable this section.
+   ========================================================================== */
+
+/* 1. Order Navigation & Buttons */
+.nav-item-order,
+.nav-links li:has(a[href="order.html"]),
+.nav-links li:has(a[href*="order.html"]),
+.drawer-nav li:has(a[href="order.html"]),
+.drawer-nav li:has(a[href*="order.html"]),
+a.nav-link[href="order.html"],
+a.nav-link[href*="order.html"],
+a.drawer-link[href="order.html"],
+a.drawer-link[href*="order.html"],
+.package-card a.btn-secondary[data-package],
+.package-card a[href^="order.html"],
+.package-card a[href*="order.html"],
+.addon-card a[href^="order.html"],
+.addon-card a[href*="order.html"] {
+  display: none !important;
+}
+
+/* 2. Customer Dashboard & Confirmation View */
+.customer-dashboard-section,
+.tracker-progress-box,
+.page-confirmation #confirmation-view {
+  display: none !important;
+}
+
+/* 3. Cart Pages, Icons, Add-to-Cart Buttons & Toasts */
+.header-cart-btn,
+#header-cart-btn,
+.drawer-cart-link,
+.drawer-nav li:has(.drawer-cart-link),
+.drawer-nav li.nav-item-cart,
+.add-to-cart-btn,
+[data-add-to-cart],
+[data-add-cart],
+.cart-toast,
+.cart-notification {
+  display: none !important;
+}
+
+/* 4. Footer Legal Category */
+.footer-legal-col,
+.footer-nav-col:has(a[href*="privacy-policy.html"]),
+.footer-nav-col:has(a[href*="terms-and-conditions.html"]),
+.footer-nav-col:has(a[href*="cancellation-return-refund-policy.html"]),
+.footer-nav-col:has(a[href*="ownership-statement.html"]) {
+  display: none !important;
+}
+
+/* 5. Sign In Navigation Links */
+.nav-item-login,
+.nav-links li:has(a[href="login.html"]),
+.nav-links li:has(a[href*="login.html"]),
+.drawer-nav li:has(a[href="login.html"]),
+.drawer-nav li:has(a[href*="login.html"]),
+a.nav-link[href="login.html"],
+a.nav-link[href*="login.html"],
+a.drawer-link[href="login.html"],
+a.drawer-link[href*="login.html"] {
+  display: none !important;
+}
+
+/* 6. High-End Paused Notice Display for Direct URL Visitors */
+.page-paused-banner {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 52vh;
+  padding: 4.5rem 1.5rem;
+  margin: 1.5rem auto 3rem auto;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+.page-paused-card {
+  background: rgba(9, 17, 14, 0.9);
+  border: 1px solid rgba(10, 96, 70, 0.45);
+  border-radius: 16px;
+  padding: 3.25rem 2.25rem;
+  max-width: 620px;
+  width: 100%;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(10, 96, 70, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.page-paused-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(176, 141, 50, 0.14);
+  color: var(--color-gold-highlight, #C9A44C);
+  border: 1px solid rgba(176, 141, 50, 0.35);
+  padding: 0.35rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.35rem;
+}
+
+.page-paused-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 700;
+  color: var(--color-silver, #E1E7E4);
+  margin-bottom: 1rem;
+  line-height: 1.25;
+}
+
+.page-paused-copy {
+  color: var(--color-sage, #8FA89B);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-paused-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Hide interactive form sections on hidden pages when paused banner is active */
+.hidden-page-form-wrap {
+  display: none !important;
+}
+
+
