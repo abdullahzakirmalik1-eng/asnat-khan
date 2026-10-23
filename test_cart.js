@@ -97,6 +97,7 @@ const htmlPagesToCheck = [
   'index.html',
   'founder-story.html',
   'services.html',
+  'portfolio.html',
   'get-quote.html',
   'order.html',
   'checkout.html',
@@ -155,6 +156,9 @@ const vercelJson = JSON.parse(fs.readFileSync(path.join(__dirname, 'vercel.json'
 const cartRewrite = vercelJson.rewrites.find(r => r.source === '/cart');
 assert(cartRewrite && cartRewrite.destination === '/cart.html', 'vercel.json has rewrite for /cart -> /cart.html');
 
+const portfolioRewrite = vercelJson.rewrites.find(r => r.source === '/portfolio');
+assert(portfolioRewrite && portfolioRewrite.destination === '/portfolio.html', 'vercel.json has rewrite for /portfolio -> /portfolio.html');
+
 const privacyRewrite = vercelJson.rewrites.find(r => r.source === '/privacy-policy');
 assert(privacyRewrite && privacyRewrite.destination === '/privacy-policy.html', 'vercel.json has rewrite for /privacy-policy -> /privacy-policy.html');
 
@@ -168,6 +172,7 @@ const ownershipRewrite = vercelJson.rewrites.find(r => r.source === '/ownership-
 assert(ownershipRewrite && ownershipRewrite.destination === '/ownership-statement.html', 'vercel.json has rewrite for /ownership-statement -> /ownership-statement.html');
 
 const servePs1 = fs.readFileSync(path.join(__dirname, 'serve.ps1'), 'utf8');
+assert(servePs1.includes('$path -eq "/portfolio"'), 'serve.ps1 maps /portfolio to /portfolio.html');
 assert(servePs1.includes('$path -eq "/cart"'), 'serve.ps1 maps /cart to /cart.html');
 assert(servePs1.includes('$path -eq "/privacy-policy"'), 'serve.ps1 maps /privacy-policy to /privacy-policy.html');
 assert(servePs1.includes('$path -eq "/terms-and-conditions"'), 'serve.ps1 maps /terms-and-conditions to /terms-and-conditions.html');
@@ -217,9 +222,10 @@ assert(ownershipHtml.includes('Open-Source Software &amp; Frameworks'), 'ownersh
 assert(ownershipHtml.includes('Portfolio Display &amp; Client Showcase'), 'ownership-statement.html explains portfolio display and NDA options');
 
 // 7.5 Footer Integration Verification
-const pagesWithSiteFooter = ['index.html', 'services.html', 'founder-story.html', 'get-quote.html'];
+const pagesWithSiteFooter = ['index.html', 'services.html', 'founder-story.html', 'portfolio.html', 'get-quote.html'];
 pagesWithSiteFooter.forEach(pg => {
   const html = fs.readFileSync(path.join(__dirname, pg), 'utf8');
+  assert(html.includes('portfolio.html'), `${pg} footer links to portfolio.html`);
   assert(html.includes('privacy-policy.html'), `${pg} footer links to privacy-policy.html`);
   assert(html.includes('terms-and-conditions.html'), `${pg} footer links to terms-and-conditions.html`);
   assert(html.includes('cancellation-return-refund-policy.html'), `${pg} footer links to cancellation-return-refund-policy.html`);

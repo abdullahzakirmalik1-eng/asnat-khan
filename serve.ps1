@@ -680,6 +680,8 @@ while ($listener.IsListening) {
             $path = "/founder-story.html"
         } elseif ($path -eq "/services" -or $path -eq "/services/") {
             $path = "/services.html"
+        } elseif ($path -eq "/portfolio" -or $path -eq "/portfolio/") {
+            $path = "/portfolio.html"
         } elseif ($path -eq "/cart" -or $path -eq "/cart/") {
             $path = "/cart.html"
         } elseif ($path -eq "/get-quote" -or $path -eq "/get-quote/" -or $path -eq "/quote" -or $path -eq "/quote/") {
