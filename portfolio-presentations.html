@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
+  <title>Presentation Design Portfolio | Asnat Khan Studio</title>
+  <meta name="description" content="Visual exhibition of high-impact PowerPoint presentation mockups, pitch decks, and brand keynote designs created by Asnat Khan Studio.">
+  <link rel="canonical" href="https://asnatkhan.com/portfolio/presentations">
+
+  <!-- Favicon / Studio Identity -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2309110E'/><text x='50%' y='55%' dominant-baseline='central' text-anchor='middle' fill='%23B08D32' font-family='sans-serif' font-weight='800' font-size='46'>AK</text></svg>">
+
+  <!-- Google Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <noscript>
+    <style>
+      .presentation-mockup-frame {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    </style>
+  </noscript>
+</head>
+<body class="page-portfolio-presentations">
+
+  <!-- =================================================================
+       01. STICKY HEADER & NAVIGATION
+       ================================================================= -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner container">
+      
+      <!-- Left: Studio Logo / Monogram -->
+      <a href="index.html" class="nav-brand" aria-label="Asnat Khan Studio Home">
+        <span class="brand-monogram" aria-hidden="true">AK</span>
+        <span class="brand-text">
+          <span class="brand-name">Asnat Khan</span>
+          <span class="brand-badge">STUDIO</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav Menu: Home | Founder Story | Services | Portfolio | Get Quote -->
+      <nav class="nav-menu" id="nav-menu" aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="founder-story.html" class="nav-link">Founder Story</a></li>
+          <li><a href="services.html" class="nav-link">Services</a></li>
+          <li class="nav-item-dropdown">
+            <div class="nav-dropdown-trigger">
+              <a href="portfolio.html" class="nav-link active">Portfolio</a>
+              <button type="button" class="nav-dropdown-caret" aria-expanded="false" aria-haspopup="true" aria-label="Toggle Portfolio categories">
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 1l4 4 4-4"></path>
+                </svg>
+              </button>
+            </div>
+            <ul class="nav-dropdown-menu" role="menu" aria-label="Portfolio categories">
+              <li role="none">
+                <a href="portfolio.html" class="dropdown-item" role="menuitem">
+                  <span class="dropdown-item-title">Website Design &amp; Development</span>
+                </a>
+              </li>
+              <li role="none">
+                <a href="/portfolio/presentations" class="dropdown-item active" role="menuitem">
+                  <span class="dropdown-item-title">Presentation Design</span>
+                </a>
+              </li>
+              <li role="none">
+                <a href="services.html#service-writing-title" class="dropdown-item dropdown-item--soon" role="menuitem">
+                  <span class="dropdown-item-title">Article Writing <span class="nav-badge-soon">Coming Soon</span></span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item-order" style="display: none !important;"><a href="order.html" class="nav-link">Order</a></li>
+          <li><a href="get-quote.html" class="nav-link">Get Quote</a></li>
+          <li class="nav-item-login" style="display: none !important;"><a href="login.html" class="nav-link">Sign In</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right: Primary CTA & Mobile Toggle -->
+      <div class="header-actions">
+        <a href="cart.html" class="header-cart-btn" aria-label="View shopping cart" id="header-cart-btn" style="display: none !important;">
+          <svg class="cart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-badge" id="header-cart-badge" aria-hidden="true" style="display: none;">0</span>
+        </a>
+
+        <a href="get-quote.html" class="btn btn-primary nav-cta" aria-label="Start a project">
+          <span>START A PROJECT</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1E7E4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer Overlay -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <div class="mobile-drawer-backdrop" id="drawer-backdrop"></div>
+    <div class="mobile-drawer-panel">
+      <div class="drawer-header">
+        <span class="brand-name">Asnat Khan</span>
+        <button type="button" class="drawer-close" id="drawer-close" aria-label="Close menu">&times;</button>
+      </div>
+      <nav class="drawer-nav">
+        <ul>
+          <li><a href="index.html" class="drawer-link">Home</a></li>
+          <li><a href="founder-story.html" class="drawer-link">Founder Story</a></li>
+          <li><a href="services.html" class="drawer-link">Services</a></li>
+          <li class="drawer-item-dropdown">
+            <div class="drawer-link-row">
+              <a href="portfolio.html" class="drawer-link active">Portfolio</a>
+              <button type="button" class="drawer-dropdown-toggle" aria-expanded="true" aria-label="Toggle Portfolio categories">
+                <svg class="drawer-caret" width="12" height="7" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 1l4 4 4-4"></path>
+                </svg>
+              </button>
+            </div>
+            <ul class="drawer-submenu is-open" id="drawer-portfolio-submenu">
+              <li><a href="portfolio.html" class="drawer-sublink">Website Design &amp; Development</a></li>
+              <li><a href="/portfolio/presentations" class="drawer-sublink active">Presentation Design</a></li>
+              <li><a href="services.html#service-writing-title" class="drawer-sublink drawer-sublink--soon">Article Writing <span class="nav-badge-soon">Coming Soon</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item-order" style="display: none !important;"><a href="order.html" class="drawer-link">Order</a></li>
+          <li><a href="get-quote.html" class="drawer-link">Get Quote</a></li>
+          <li class="nav-item-login" style="display: none !important;"><a href="login.html" class="drawer-link">Sign In</a></li>
+          <li class="nav-item-cart" style="display: none !important;">
+            <a href="cart.html" class="drawer-link drawer-cart-link" aria-label="View shopping cart">
+              <span>Cart</span>
+              <span class="drawer-cart-badge" id="drawer-cart-badge" style="display: none;">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="drawer-footer">
+        <a href="get-quote.html" class="btn btn-primary btn-block drawer-cta">
+          <span>START A PROJECT</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+        <div class="drawer-trust-tag">
+          Level 2 Fiverr Seller &middot; 350+ Reviews &middot; 4.9★
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================================
+       02. IMAGE-LED PRESENTATION EXHIBITION
+       Strictly Visual Mockup Content — No Headings, Captions, or Extra Text
+       ================================================================= -->
+  <main class="presentation-gallery-page" id="main-content">
+    
+    <!-- Accessible Screen-Reader Landmark (Visually Hidden) -->
+    <h1 class="visually-hidden">Presentation Design Portfolio</h1>
+
+    <!-- Ambient Subtle Atmosphere -->
+    <div class="presentation-atmosphere" aria-hidden="true">
+      <div class="presentation-glow presentation-glow--1"></div>
+      <div class="presentation-glow presentation-glow--2"></div>
+      <div class="presentation-glow presentation-glow--3"></div>
+    </div>
+
+    <!-- Exhibition Mockups Canvas (12 PowerPoint Boards in Deliberate Visual Sequence) -->
+    <div class="presentation-exhibition-canvas">
+
+      <!-- Presentation 01: Elevate Footwear & Performance Pitch Deck Board -->
+      <div class="presentation-mockup-frame" data-index="1">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-01-elevate.png" 
+          alt="Elevate Performance presentation design mockup showcasing multi-slide athletic brand deck with product typography, feature highlights, and editorial layout" 
+          width="1536" 
+          height="1024" 
+          loading="eager" 
+          fetchpriority="high"
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 02: NeuroPulse Cyan AI Platform Showcase Board -->
+      <div class="presentation-mockup-frame" data-index="2">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-02-neuropulse-cyan.png" 
+          alt="NeuroPulse AI automation pitch deck presentation mockup showing cyber teal data dashboards, platform workflows, and laptop framing" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 03: Luxéa Beauty Cosmetics Pitch Deck Board -->
+      <div class="presentation-mockup-frame" data-index="3">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-03-luxea-beauty.png" 
+          alt="Luxéa Beauty cosmetics brand presentation mockup showing luxury terracotta slide compositions, product range, and aesthetic device framing" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 04: Taskora SaaS Workspace Presentation Board -->
+      <div class="presentation-mockup-frame" data-index="4">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-04-taskora-workspace.png" 
+          alt="Taskora SaaS product presentation deck mockup highlighting digital workspace features, team collaboration slides, and purple interface graphics" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 05: Nexora Departmental Store Presentation Board -->
+      <div class="presentation-mockup-frame" data-index="5">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-05-nexora-pitchdeck.png" 
+          alt="Nexora Departmental Store corporate presentation mockup featuring editorial retail deck layout, financial metrics, and modern commerce slides" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 06: Pulse Perform Sportswear Deck Board -->
+      <div class="presentation-mockup-frame" data-index="6">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-06-pulse-perform.png" 
+          alt="Pulse Perform athletics presentation mockup exhibiting high-contrast electric green slide grids, athlete visuals, and mobile application demo" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 07: Fluxora Project Intelligence Deck Board -->
+      <div class="presentation-mockup-frame" data-index="7">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-07-fluxora-ai.png" 
+          alt="Fluxora enterprise software pitch deck mockup showcasing deep blue digital dashboards, intelligent analytics modules, and slide architecture" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 08: NeuroPulse Purple AI Automation Board -->
+      <div class="presentation-mockup-frame" data-index="8">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-08-neuropulse-purple.png" 
+          alt="NeuroPulse automation intelligence presentation deck board showing violet workflow pipelines, neural network architecture, and slide layouts" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 09: Lumivara Skincare Brand Showcase Board -->
+      <div class="presentation-mockup-frame" data-index="9">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-09-lumivara-skincare.png" 
+          alt="Lumivara Skincare presentation design board showcasing delicate blush editorial slides, botanical formula highlights, and product bottle mockups" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 10: Stride Urban Sneakers Presentation Board -->
+      <div class="presentation-mockup-frame" data-index="10">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-10-stride-sneakers.png" 
+          alt="Stride Sneakers presentation design mockup featuring bold urban footwear launch deck, street culture imagery, and slide typography" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 11: Lumivara Cosmetic Science Presentation Board -->
+      <div class="presentation-mockup-frame" data-index="11">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-11-lumivara-editorial.png" 
+          alt="Lumivara beauty science pitch presentation showcasing clinical testing slides, clean beauty ingredients, and soft petal aesthetic compositions" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+      <!-- Presentation 12: PowerPoint Multi-Slide Showcase Board -->
+      <div class="presentation-mockup-frame" data-index="12">
+        <img 
+          src="assets/images/portfolio/presentations/presentation-12-powerpoint-deck.png" 
+          alt="PowerPoint master presentation exhibition board displaying complete multi-slide pitch deck layout, device framing, and brand presentation system" 
+          width="1536" 
+          height="1024" 
+          loading="lazy" 
+          decoding="async" 
+          class="presentation-mockup-img"
+        >
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- =================================================================
+       03. SHARED GLOBAL FOOTER
+       ================================================================= -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-inner container">
+      
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-brand" aria-label="Asnat Khan Studio Home">
+            <span class="brand-monogram" aria-hidden="true">AK</span>
+            <span class="brand-text">
+              <span class="brand-name">Asnat Khan</span>
+              <span class="brand-badge">STUDIO</span>
+            </span>
+          </a>
+          <p class="footer-tagline">Websites, without the juggling.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer Navigation">
+          <div class="footer-nav-col">
+            <span class="footer-col-title">Studio</span>
+            <ul class="footer-links">
+              <li><a href="index.html" class="footer-link">Home</a></li>
+              <li><a href="founder-story.html" class="footer-link">Founder Story</a></li>
+              <li><a href="services.html" class="footer-link">Services</a></li>
+              <li><a href="portfolio.html" class="footer-link active">Portfolio</a></li>
+              <li><a href="get-quote.html" class="footer-link">Get Quote</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-nav-col footer-legal-col" style="display: none !important;">
+            <span class="footer-col-title">Legal</span>
+            <ul class="footer-links">
+              <li><a href="privacy-policy.html" class="footer-link">Privacy Policy</a></li>
+              <li><a href="terms-and-conditions.html" class="footer-link">Terms &amp; Conditions</a></li>
+              <li><a href="cancellation-return-refund-policy.html" class="footer-link">Cancellation &amp; Refund Policy</a></li>
+              <li><a href="ownership-statement.html" class="footer-link">Ownership Statement</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-fine-separator" aria-hidden="true"></div>
+        <div class="footer-bottom-row">
+          <p class="footer-copyright">&copy; 2026 Asnat Khan. All rights reserved.</p>
+          <div class="footer-credentials">
+            <span>Level 2 Seller &middot; Verified Digital Studio</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/presentations.js"></script>
+  <script type="module" src="js/cart.js"></script>
+
+</body>
+</html>

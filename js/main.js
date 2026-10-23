@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   initStickyHeader();
   initMobileDrawer();
+  initNavDropdowns();
   initScrollSpy();
   initScrollReveals();
   initReviewCarousel();
@@ -76,10 +77,74 @@ function initMobileDrawer() {
 }
 
 /* --------------------------------------------------------------------------
+   02B. PORTFOLIO NAVIGATION DROPDOWNS (DESKTOP & MOBILE DRAWER)
+   -------------------------------------------------------------------------- */
+function initNavDropdowns() {
+  // Desktop Caret Toggle
+  const dropdownItems = document.querySelectorAll('.nav-item-dropdown');
+  dropdownItems.forEach(item => {
+    const caret = item.querySelector('.nav-dropdown-caret');
+    if (!caret) return;
+
+    caret.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = item.classList.toggle('is-open');
+      caret.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  // Close desktop dropdown on outside click or Escape
+  document.addEventListener('click', (e) => {
+    dropdownItems.forEach(item => {
+      if (!item.contains(e.target)) {
+        item.classList.remove('is-open');
+        const caret = item.querySelector('.nav-dropdown-caret');
+        if (caret) caret.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdownItems.forEach(item => {
+        item.classList.remove('is-open');
+        const caret = item.querySelector('.nav-dropdown-caret');
+        if (caret) caret.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // Mobile Drawer Submenu Dropdown Toggle
+  const drawerDropdownToggles = document.querySelectorAll('.drawer-dropdown-toggle');
+  drawerDropdownToggles.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', !isExpanded ? 'true' : 'false');
+
+      const parentItem = btn.closest('.drawer-item-dropdown');
+      if (parentItem) {
+        const submenu = parentItem.querySelector('.drawer-submenu');
+        if (submenu) {
+          submenu.classList.toggle('is-open', !isExpanded);
+        }
+      }
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
    03. SCROLL SPY & ACTIVE NAV HIGHLIGHT
    -------------------------------------------------------------------------- */
 function initScrollSpy() {
-  if (document.body.classList.contains('page-founder-story') || document.body.classList.contains('page-services') || document.body.classList.contains('page-get-quote')) {
+  if (
+    document.body.classList.contains('page-founder-story') || 
+    document.body.classList.contains('page-services') || 
+    document.body.classList.contains('page-get-quote') ||
+    document.body.classList.contains('page-portfolio') ||
+    document.body.classList.contains('page-portfolio-presentations')
+  ) {
     // Keep active navigation item stable on dedicated subpages
     return;
   }

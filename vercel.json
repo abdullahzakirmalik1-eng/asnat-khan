@@ -5,6 +5,8 @@
   "rewrites": [
     { "source": "/founder-story", "destination": "/founder-story.html" },
     { "source": "/services", "destination": "/services.html" },
+    { "source": "/portfolio/presentations", "destination": "/portfolio-presentations.html" },
+    { "source": "/portfolio-presentations", "destination": "/portfolio-presentations.html" },
     { "source": "/portfolio", "destination": "/portfolio.html" },
     { "source": "/cart", "destination": "/cart.html" },
     { "source": "/get-quote", "destination": "/get-quote.html" },

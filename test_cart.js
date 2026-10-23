@@ -159,6 +159,9 @@ assert(cartRewrite && cartRewrite.destination === '/cart.html', 'vercel.json has
 const portfolioRewrite = vercelJson.rewrites.find(r => r.source === '/portfolio');
 assert(portfolioRewrite && portfolioRewrite.destination === '/portfolio.html', 'vercel.json has rewrite for /portfolio -> /portfolio.html');
 
+const presRewrite = vercelJson.rewrites.find(r => r.source === '/portfolio/presentations');
+assert(presRewrite && presRewrite.destination === '/portfolio-presentations.html', 'vercel.json has rewrite for /portfolio/presentations -> /portfolio-presentations.html');
+
 const privacyRewrite = vercelJson.rewrites.find(r => r.source === '/privacy-policy');
 assert(privacyRewrite && privacyRewrite.destination === '/privacy-policy.html', 'vercel.json has rewrite for /privacy-policy -> /privacy-policy.html');
 
@@ -172,6 +175,7 @@ const ownershipRewrite = vercelJson.rewrites.find(r => r.source === '/ownership-
 assert(ownershipRewrite && ownershipRewrite.destination === '/ownership-statement.html', 'vercel.json has rewrite for /ownership-statement -> /ownership-statement.html');
 
 const servePs1 = fs.readFileSync(path.join(__dirname, 'serve.ps1'), 'utf8');
+assert(servePs1.includes('$path -eq "/portfolio/presentations"'), 'serve.ps1 maps /portfolio/presentations to /portfolio-presentations.html');
 assert(servePs1.includes('$path -eq "/portfolio"'), 'serve.ps1 maps /portfolio to /portfolio.html');
 assert(servePs1.includes('$path -eq "/cart"'), 'serve.ps1 maps /cart to /cart.html');
 assert(servePs1.includes('$path -eq "/privacy-policy"'), 'serve.ps1 maps /privacy-policy to /privacy-policy.html');

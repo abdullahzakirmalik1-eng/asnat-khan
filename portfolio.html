@@ -55,7 +55,33 @@
           <li><a href="index.html" class="nav-link">Home</a></li>
           <li><a href="founder-story.html" class="nav-link">Founder Story</a></li>
           <li><a href="services.html" class="nav-link">Services</a></li>
-          <li><a href="portfolio.html" class="nav-link active">Portfolio</a></li>
+          <li class="nav-item-dropdown">
+            <div class="nav-dropdown-trigger">
+              <a href="portfolio.html" class="nav-link active">Portfolio</a>
+              <button type="button" class="nav-dropdown-caret" aria-expanded="false" aria-haspopup="true" aria-label="Toggle Portfolio categories">
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 1l4 4 4-4"></path>
+                </svg>
+              </button>
+            </div>
+            <ul class="nav-dropdown-menu" role="menu" aria-label="Portfolio categories">
+              <li role="none">
+                <a href="portfolio.html" class="dropdown-item active" role="menuitem">
+                  <span class="dropdown-item-title">Website Design &amp; Development</span>
+                </a>
+              </li>
+              <li role="none">
+                <a href="/portfolio/presentations" class="dropdown-item" role="menuitem">
+                  <span class="dropdown-item-title">Presentation Design</span>
+                </a>
+              </li>
+              <li role="none">
+                <a href="services.html#service-writing-title" class="dropdown-item dropdown-item--soon" role="menuitem">
+                  <span class="dropdown-item-title">Article Writing <span class="nav-badge-soon">Coming Soon</span></span>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item-order" style="display: none !important;"><a href="order.html" class="nav-link">Order</a></li>
           <li><a href="get-quote.html" class="nav-link">Get Quote</a></li>
           <li class="nav-item-login" style="display: none !important;"><a href="login.html" class="nav-link">Sign In</a></li>
@@ -102,7 +128,21 @@
           <li><a href="index.html" class="drawer-link">Home</a></li>
           <li><a href="founder-story.html" class="drawer-link">Founder Story</a></li>
           <li><a href="services.html" class="drawer-link">Services</a></li>
-          <li><a href="portfolio.html" class="drawer-link active">Portfolio</a></li>
+          <li class="drawer-item-dropdown">
+            <div class="drawer-link-row">
+              <a href="portfolio.html" class="drawer-link active">Portfolio</a>
+              <button type="button" class="drawer-dropdown-toggle" aria-expanded="true" aria-label="Toggle Portfolio categories">
+                <svg class="drawer-caret" width="12" height="7" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 1l4 4 4-4"></path>
+                </svg>
+              </button>
+            </div>
+            <ul class="drawer-submenu is-open" id="drawer-portfolio-submenu">
+              <li><a href="portfolio.html" class="drawer-sublink active">Website Design &amp; Development</a></li>
+              <li><a href="/portfolio/presentations" class="drawer-sublink">Presentation Design</a></li>
+              <li><a href="services.html#service-writing-title" class="drawer-sublink drawer-sublink--soon">Article Writing <span class="nav-badge-soon">Coming Soon</span></a></li>
+            </ul>
+          </li>
           <li class="nav-item-order" style="display: none !important;"><a href="order.html" class="drawer-link">Order</a></li>
           <li><a href="get-quote.html" class="drawer-link">Get Quote</a></li>
           <li class="nav-item-login" style="display: none !important;"><a href="login.html" class="drawer-link">Sign In</a></li>
