@@ -10134,3 +10134,202 @@ a.drawer-link[href*="login.html"] {
     filter: none !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   FLOATING WHATSAPP CONTACT BUTTON
+   Restrained luxury emerald-and-gold aesthetic with official brand recognition
+   -------------------------------------------------------------------------- */
+.whatsapp-float-wrap {
+  position: fixed;
+  right: calc(24px + env(safe-area-inset-right, 0px));
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 990;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.whatsapp-float-btn {
+  pointer-events: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-full);
+  /* Tailored emerald-infused WhatsApp green gradient */
+  background: linear-gradient(135deg, #189859 0%, #107C57 50%, var(--color-emerald) 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(176, 141, 50, 0.35); /* Restrained metallic gold */
+  box-shadow: 
+    0 8px 24px -4px rgba(9, 17, 14, 0.75),
+    0 2px 8px -1px rgba(10, 96, 70, 0.4),
+    inset 0 1px 1px rgba(225, 231, 228, 0.25);
+  cursor: pointer;
+  text-decoration: none;
+  transition: 
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.whatsapp-float-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #FFFFFF;
+  pointer-events: none;
+}
+
+.whatsapp-float-icon svg,
+.whatsapp-icon-svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+/* Tooltip: Discreet, elegant pill on desktop hover/focus */
+.whatsapp-float-tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  background: rgba(9, 17, 14, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-silver);
+  font-family: var(--font-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  line-height: 1.4;
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-gold-fine);
+  box-shadow: 0 4px 18px rgba(9, 17, 14, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: 
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    visibility var(--transition-fast);
+}
+
+.whatsapp-float-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: rgba(9, 17, 14, 0.94);
+  border-top: 1px solid var(--border-gold-fine);
+  border-right: 1px solid var(--border-gold-fine);
+}
+
+/* Desktop Hover & Focus Interactions */
+@media (hover: hover) and (pointer: fine) {
+  .whatsapp-float-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #1EA863 0%, #138960 50%, #0C6E50 100%);
+    border-color: rgba(201, 169, 74, 0.6); /* Metallic gold light */
+    box-shadow: 
+      0 12px 28px -4px rgba(9, 17, 14, 0.85),
+      0 4px 14px 0 rgba(16, 138, 92, 0.45),
+      inset 0 1px 1px rgba(225, 231, 228, 0.35);
+  }
+
+  .whatsapp-float-btn:hover .whatsapp-float-tooltip,
+  .whatsapp-float-btn:focus-visible .whatsapp-float-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* Pressed State on touch / click */
+.whatsapp-float-btn:active {
+  transform: translateY(0) scale(0.96);
+  box-shadow: 
+    0 4px 12px rgba(9, 17, 14, 0.65),
+    inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+/* Keyboard Navigation Focus State */
+.whatsapp-float-btn:focus-visible {
+  outline: 2px solid var(--color-gold-light);
+  outline-offset: 3px;
+}
+
+.whatsapp-float-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Touch devices: hide tooltip completely to prevent persistent screen crowding */
+@media (hover: none) {
+  .whatsapp-float-tooltip {
+    display: none !important;
+  }
+}
+
+/* Responsive adjustments for mobile viewports */
+@media (max-width: 640px) {
+  .whatsapp-float-wrap {
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .whatsapp-float-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .whatsapp-float-icon,
+  .whatsapp-float-icon svg,
+  .whatsapp-icon-svg {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float-btn,
+  .whatsapp-float-tooltip {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .whatsapp-float-btn:hover {
+    transform: none !important;
+  }
+
+  .whatsapp-float-btn:active {
+    transform: none !important;
+  }
+
+  .whatsapp-float-btn:hover .whatsapp-float-tooltip,
+  .whatsapp-float-btn:focus-visible .whatsapp-float-tooltip {
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* Explicit exclusion on admin and customer dashboard pages */
+.admin-body .whatsapp-float-wrap,
+.page-admin .whatsapp-float-wrap,
+.page-order-confirmation .whatsapp-float-wrap {
+  display: none !important;
+}
+
