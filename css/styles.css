@@ -8816,6 +8816,21 @@ a.drawer-link[href*="login.html"] {
   cursor: pointer;
 }
 
+.card-viewport picture,
+.card-viewport .card-picture,
+.portrait-frame picture,
+.founder-portrait-frame picture,
+.presentation-mockup-frame picture,
+.review-img-trigger picture {
+  display: contents;
+}
+
+.lightbox-scroll-viewport picture,
+.lightbox-phone-viewport picture {
+  display: block;
+  width: 100%;
+}
+
 .card-viewport img {
   width: 100%;
   height: 100%;

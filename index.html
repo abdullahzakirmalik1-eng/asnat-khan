@@ -218,14 +218,18 @@
             <div class="portrait-accent-ring" aria-hidden="true"></div>
             
             <div class="portrait-frame">
-              <img 
-                src="assets/images/asnat-khan-portrait.png" 
-                alt="Asnat Khan — Professional Website Design and Development Lead" 
-                class="hero-portrait-img"
-                width="1185" 
-                height="1327"
-                loading="eager"
-                decoding="async">
+              <picture>
+                <source type="image/webp" srcset="assets/images/asnat-khan-portrait.webp">
+                <img 
+                  src="assets/images/asnat-khan-portrait.png" 
+                  alt="Asnat Khan — Professional Website Design and Development Lead" 
+                  class="hero-portrait-img"
+                  width="1185" 
+                  height="1327"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async">
+              </picture>
             </div>
 
             <!-- Subtle Studio Floating Marker -->
@@ -744,13 +748,17 @@
               <div class="review-card">
                 <div class="review-card-frame">
                   <button type="button" class="review-img-trigger" data-full="assets/images/review-apostlewelsh.jpg" aria-label="Enlarge review from apostlewelsh">
-                    <img 
-                      src="assets/images/review-apostlewelsh.jpg" 
-                      alt="Verified Fiverr review from apostlewelsh rating Asnat Khan 5 stars: 'Asnat Khan delivered exceptional work with outstanding professionalism and creativity.'" 
-                      class="review-screenshot-img"
-                      loading="lazy"
-                      width="1080" 
-                      height="263">
+                    <picture>
+                      <source type="image/webp" srcset="assets/images/review-apostlewelsh.webp">
+                      <img 
+                        src="assets/images/review-apostlewelsh.jpg" 
+                        alt="Verified Fiverr review from apostlewelsh rating Asnat Khan 5 stars: 'Asnat Khan delivered exceptional work with outstanding professionalism and creativity.'" 
+                        class="review-screenshot-img"
+                        loading="lazy"
+                        decoding="async"
+                        width="1080" 
+                        height="263">
+                    </picture>
                     <span class="zoom-cue" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -770,13 +778,17 @@
               <div class="review-card">
                 <div class="review-card-frame">
                   <button type="button" class="review-img-trigger" data-full="assets/images/review-paul-johno.jpg" aria-label="Enlarge review from paul_johno">
-                    <img 
-                      src="assets/images/review-paul-johno.jpg" 
-                      alt="Verified Fiverr review from paul_johno rating Asnat Khan 5 stars: 'It is always great working with Asnat Khan. She goes above and beyond.'" 
-                      class="review-screenshot-img"
-                      loading="lazy"
-                      width="1080" 
-                      height="206">
+                    <picture>
+                      <source type="image/webp" srcset="assets/images/review-paul-johno.webp">
+                      <img 
+                        src="assets/images/review-paul-johno.jpg" 
+                        alt="Verified Fiverr review from paul_johno rating Asnat Khan 5 stars: 'It is always great working with Asnat Khan. She goes above and beyond.'" 
+                        class="review-screenshot-img"
+                        loading="lazy"
+                        decoding="async"
+                        width="1080" 
+                        height="206">
+                    </picture>
                     <span class="zoom-cue" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -796,13 +808,17 @@
               <div class="review-card">
                 <div class="review-card-frame">
                   <button type="button" class="review-img-trigger" data-full="assets/images/review-tintintin.jpg" aria-label="Enlarge review from tintintin">
-                    <img 
-                      src="assets/images/review-tintintin.jpg" 
-                      alt="Verified Fiverr review from tintintin rating Asnat Khan 5 stars: 'The project was delivered to the highest standard. We are very pleased with the quality of the work.'" 
-                      class="review-screenshot-img"
-                      loading="lazy"
-                      width="1080" 
-                      height="216">
+                    <picture>
+                      <source type="image/webp" srcset="assets/images/review-tintintin.webp">
+                      <img 
+                        src="assets/images/review-tintintin.jpg" 
+                        alt="Verified Fiverr review from tintintin rating Asnat Khan 5 stars: 'The project was delivered to the highest standard. We are very pleased with the quality of the work.'" 
+                        class="review-screenshot-img"
+                        loading="lazy"
+                        decoding="async"
+                        width="1080" 
+                        height="216">
+                    </picture>
                     <span class="zoom-cue" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -1066,7 +1082,7 @@
   </div>
 
   <!-- Main JavaScript File -->
-  <script src="js/main.js"></script>
+  <script defer src="js/main.js"></script>
 
   <!-- Shopping Cart Script -->
   <script type="module" src="js/cart.js"></script>

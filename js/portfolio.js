@@ -109,10 +109,14 @@ function initDeviceSwitchers() {
     const switcher = card.querySelector('.device-switcher');
     const viewport = card.querySelector('.card-viewport');
     const img = viewport ? viewport.querySelector('img') : null;
+    const source = viewport ? viewport.querySelector('source') : null;
     const desktopSrc = card.getAttribute('data-desktop');
     const mobileSrc = card.getAttribute('data-mobile');
 
     if (!switcher || !viewport || !img || !desktopSrc || !mobileSrc) return;
+
+    const desktopWebp = desktopSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+    const mobileWebp = mobileSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
 
     const btns = switcher.querySelectorAll('.device-btn');
 
@@ -126,9 +130,11 @@ function initDeviceSwitchers() {
 
         if (mode === 'mobile') {
           viewport.classList.add('is-mobile-view');
+          if (source) source.srcset = mobileWebp;
           img.src = mobileSrc;
         } else {
           viewport.classList.remove('is-mobile-view');
+          if (source) source.srcset = desktopWebp;
           img.src = desktopSrc;
         }
       });
@@ -162,6 +168,8 @@ function initPortfolioLightbox() {
   const phoneViewport = document.getElementById('lightbox-phone-viewport');
   const previewImg = document.getElementById('lightbox-preview-img');
   const phoneImg = document.getElementById('lightbox-phone-img');
+  const desktopSource = document.getElementById('lightbox-preview-webp');
+  const phoneSource = document.getElementById('lightbox-phone-webp');
 
   if (!modal || !previewImg) return;
 
@@ -282,6 +290,7 @@ function initPortfolioLightbox() {
       if (btnMobile) btnMobile.classList.add('active');
       if (btnDesktop) btnDesktop.classList.remove('active');
       if (phoneImg && activeMobileSrc) {
+        if (phoneSource) phoneSource.srcset = activeMobileSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
         phoneImg.src = activeMobileSrc;
       }
       setTimeout(updateScrollProgress, 50);
@@ -291,6 +300,7 @@ function initPortfolioLightbox() {
       if (btnDesktop) btnDesktop.classList.add('active');
       if (btnMobile) btnMobile.classList.remove('active');
       if (previewImg && activeDesktopSrc) {
+        if (desktopSource) desktopSource.srcset = activeDesktopSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
         previewImg.src = activeDesktopSrc;
       }
       setTimeout(updateScrollProgress, 50);
@@ -329,10 +339,12 @@ function initPortfolioLightbox() {
     // Set images with onload callbacks for dynamic scroll recalculation
     if (previewImg && activeDesktopSrc) {
       previewImg.onload = () => updateScrollProgress();
+      if (desktopSource) desktopSource.srcset = activeDesktopSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
       previewImg.src = activeDesktopSrc;
     }
     if (phoneImg && activeMobileSrc) {
       phoneImg.onload = () => updateScrollProgress();
+      if (phoneSource) phoneSource.srcset = activeMobileSrc.replace(/\.(png|jpg|jpeg)$/i, '.webp');
       phoneImg.src = activeMobileSrc;
     }
 

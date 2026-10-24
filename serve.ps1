@@ -71,6 +71,8 @@ $mimeTypes = @{
     ".jpg"  = "image/jpeg"
     ".jpeg" = "image/jpeg"
     ".svg"  = "image/svg+xml"
+    ".webp" = "image/webp"
+    ".avif" = "image/avif"
     ".json" = "application/json; charset=utf-8"
     ".ico"  = "image/x-icon"
 }
@@ -725,9 +727,31 @@ while ($listener.IsListening) {
             $bytes = [System.IO.File]::ReadAllBytes($filePath)
 
             $response.ContentType = $contentType
-            $response.ContentLength64 = $bytes.Length
-            $response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate")
             $response.AddHeader("Access-Control-Allow-Origin", "*")
+
+            if ($path.StartsWith("/assets/") -or $ext -in @(".png", ".jpg", ".jpeg", ".webp", ".avif", ".svg", ".ico")) {
+                $response.AddHeader("Cache-Control", "public, max-age=31536000, immutable")
+            } elseif ($path.StartsWith("/css/") -or $path.StartsWith("/js/") -or $ext -in @(".css", ".js")) {
+                $response.AddHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800")
+            } else {
+                $response.AddHeader("Cache-Control", "public, max-age=0, must-revalidate")
+            }
+
+            $isText = $ext -in @(".html", ".css", ".js", ".json", ".svg")
+            $acceptsGzip = $request.Headers["Accept-Encoding"] -and ($request.Headers["Accept-Encoding"].IndexOf("gzip") -ge 0)
+            if ($isText -and $acceptsGzip -and $bytes.Length -gt 256) {
+                try {
+                    $ms = New-Object System.IO.MemoryStream
+                    $gz = New-Object System.IO.Compression.GZipStream($ms, [System.IO.Compression.CompressionMode]::Compress)
+                    $gz.Write($bytes, 0, $bytes.Length)
+                    $gz.Close()
+                    $bytes = $ms.ToArray()
+                    $ms.Close()
+                    $response.AddHeader("Content-Encoding", "gzip")
+                } catch {}
+            }
+
+            $response.ContentLength64 = $bytes.Length
             $response.StatusCode = 200
 
             if ($request.HttpMethod -ne "HEAD") {
